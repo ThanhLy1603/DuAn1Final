@@ -3,28 +3,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package UI.Component;
+
 import DAO.KhachHangDAO;
 import Interfaces.Initialize;
 import Interfaces.CheckForm;
 import Interfaces.CrudController;
 import Entity.KhachHang;
+import Utils.Auth;
 import Utils.DialogBox;
 import Utils.ValidateInput;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author anhth
  */
-public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<KhachHang>,CheckForm<KhachHang, String>, CrudController{
+public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<KhachHang>, CheckForm<KhachHang, String>, CrudController {
+
     private KhachHangDAO dao = new KhachHangDAO();
     private ValidateInput input = new ValidateInput();
-    
+
     public KhachHangJDialog() {
         initComponents();
         init();
     }
-    
+
     @Override
     public void init() {
         fillToTable();
@@ -36,22 +40,22 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
     public void fillToTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<KhachHang> list = dao.getAllData();
-        
+
         String[] col = {
-           "Mã khách hàng",
-           "Tên khách hàng",
-           "Giới tính",
-           "Số điện thoại",
-           "Địa chỉ"
+            "Mã khách hàng",
+            "Tên khách hàng",
+            "Giới tính",
+            "Số điện thoại",
+            "Địa chỉ"
         };
-        
+
         model.setColumnIdentifiers(col);
-        
-        for(KhachHang o : list){
+
+        for (KhachHang o : list) {
             model.addRow(new Object[]{
                 o.getMaKH(),
                 o.getTenKH(),
-                o.isGioiTinh()?"Nam":"Nữ",
+                o.isGioiTinh() ? "Nam" : "Nữ",
                 o.getDiaChi()
             });
         }
@@ -62,7 +66,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
     public void filterTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<KhachHang> list = dao.getDataByValue(txtSearch.getText());
-        
+
         String[] col = {
             "Mã khách hàng",
             "Tên khách hàng",
@@ -70,14 +74,14 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
             "Số điện thoại",
             "Địa chỉ"
         };
-        
+
         model.setColumnIdentifiers(col);
-        
-        for(KhachHang o : list){
+
+        for (KhachHang o : list) {
             model.addRow(new Object[]{
                 o.getMaKH(),
                 o.getTenKH(),
-                o.isGioiTinh()?"Nam":"Nữ",
+                o.isGioiTinh() ? "Nam" : "Nữ",
                 o.getSoDT(),
                 o.getDiaChi()
             });
@@ -90,21 +94,20 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-
     @Override
     public void getForm(int index) {
-       String maKH = (String) tblKhachHang.getValueAt(index, 0);
-       String tenKH = (String) tblKhachHang.getValueAt(index, 1);
-       String gioiTinhStr = (String) tblKhachHang.getValueAt(index, 2);
-       String sdt = (String) tblKhachHang.getValueAt(index, 3);
-       String diachi = (String) tblKhachHang.getValueAt(index, 4);
-       
-       boolean gioiTinh = gioiTinhStr.equals("Nam");
-       rdnNam.setSelected(gioiTinh);
-       rdnNu.setSelected(gioiTinh);
-       
-       KhachHang kh = new KhachHang(maKH, tenKH, gioiTinh, sdt, diachi);
-       setForm(kh);
+        String maKH = (String) tblKhachHang.getValueAt(index, 0);
+        String tenKH = (String) tblKhachHang.getValueAt(index, 1);
+        String gioiTinhStr = (String) tblKhachHang.getValueAt(index, 2);
+        String sdt = (String) tblKhachHang.getValueAt(index, 3);
+        String diachi = (String) tblKhachHang.getValueAt(index, 4);
+
+        boolean gioiTinh = gioiTinhStr.equals("Nam");
+        rdnNam.setSelected(gioiTinh);
+        rdnNu.setSelected(gioiTinh);
+
+        KhachHang kh = new KhachHang(maKH, tenKH, gioiTinh, sdt, diachi);
+        setForm(kh);
     }
 
     @Override
@@ -132,33 +135,31 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         String diachi = txaDiaChi.getText();
         String patternText = "\\s+";
         int count = 0;
-        
+
         if (tenKH.equals("") || tenKH.matches(patternText)) {
             sb.append("Bạn chưa nhập tên\n");
             count++;
         }
-        
+
         if (maKH.equals("") || maKH.matches(patternText)) {
             sb.append("Bạn chưa nhập mã\n");
             count++;
         }
-        
-        
-        
-        if(sdt.equals("") || sdt.matches(patternText)) {
+
+        if (sdt.equals("") || sdt.matches(patternText)) {
             sb.append("Bạn chưa nhập số điện thoại");
             count++;
         }
-        
-        if(diachi.equals("") || diachi.matches(patternText)) {
+
+        if (diachi.equals("") || diachi.matches(patternText)) {
             sb.append("Bạn chưa nhập địa chỉ");
             count++;
         }
-        
+
         if (sb.length() > 0) {
             DialogBox.notice(this, sb.toString());
         }
-        
+
         return count == 0;
     }
 
@@ -166,9 +167,11 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
     public boolean isCheckContain(List<KhachHang> list, String ma) {
         int count = 0;
         for (KhachHang o : list) {
-            if (ma.equals(o.getMaKH())) count++;
+            if (ma.equals(o.getMaKH())) {
+                count++;
+            }
         }
-        
+
         return count != 0;
     }
 
@@ -176,7 +179,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
     public boolean isCheckDuplicate() {
         List<KhachHang> list = dao.getAllData();
         String ma = txtMaKH.getText();
-        
+
         if (isCheckContain(list, ma)) {
             DialogBox.notice(this, "Mã loại này có rồi. Vui lòng nhập mã loại khác");
             return false;
@@ -189,7 +192,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
     public boolean isCheckUpdate() {
         List<KhachHang> list = dao.getAllData();
         String ma = txtMaKH.getText();
-        
+
         if (!isCheckContain(list, ma)) {
             DialogBox.notice(this, "Không tìm thấy khách hàng cần sửa");
             return false;
@@ -207,7 +210,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
     public boolean isCheckDelete() {
         List<KhachHang> list = dao.getAllData();
         String ma = txtMaKH.getText();
-        
+
         if (!isCheckContain(list, ma)) {
             DialogBox.notice(this, "Không tìm thấy khách hàng cần xóa");
             return false;
@@ -225,14 +228,13 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                 String sdt = txtSDT.getText();
                 String diachi = txaDiaChi.getText();
                 Boolean gioiTinh = rdnNam.isSelected();
-              
-                dao.insertData(new KhachHang(maKH, tenKH, gioiTinh, sdt, diachi)); 
+
+                dao.insertData(new KhachHang(maKH, tenKH, gioiTinh, sdt, diachi));
                 DialogBox.notice(this, "Thêm thành công");
                 reset();
                 fillToTable();
             }
         }
-
 
     }
 
@@ -247,31 +249,35 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
 
     @Override
     public void update() {
-        if(isCheckValid()){
-            if(isCheckUpdate()) {
+        if (isCheckValid()) {
+            if (isCheckUpdate()) {
                 String maKH = txtMaKH.getText();
                 String tenKH = txtTenKH.getText();
                 String sdt = txtSDT.getText();
                 String diachi = txaDiaChi.getText();
                 Boolean gioiTinh = rdnNam.isSelected();
-              
-                dao.insertData(new KhachHang(maKH, tenKH, gioiTinh, sdt, diachi)); 
+
+                dao.insertData(new KhachHang(maKH, tenKH, gioiTinh, sdt, diachi));
                 DialogBox.notice(this, "Sửa thành công");
                 reset();
-                fillToTable(); 
+                fillToTable();
             }
         }
     }
 
     @Override
     public void delete() {
-        if (isCheckDelete()) {
-            if (DialogBox.confirm(this, "Bạn có muốn xóa khách hàng này không?")){
-                dao.deleteById(txtMaKH.getText());
-                DialogBox.notice(this, "Xóa thành công");
-                fillToTable();
-                reset();
+        if (Auth.isManager()) {
+            if (isCheckDelete()) {
+                if (DialogBox.confirm(this, "Bạn có muốn xóa khách hàng này không?")) {
+                    dao.deleteById(txtMaKH.getText());
+                    DialogBox.notice(this, "Xóa thành công");
+                    fillToTable();
+                    reset();
+                }
             }
+        }else{
+            DialogBox.notice(this, "Bạn không có quyền xóa");
         }
     }
 
@@ -671,5 +677,4 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
     private javax.swing.JTextField txtTenKH;
     // End of variables declaration//GEN-END:variables
 
-    
 }

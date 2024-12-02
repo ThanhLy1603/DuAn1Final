@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package UI.Detail;
+
 import DAO.LoaiSanPhamDAO;
 import DAO.SanPhamDAO;
 import Entity.LoaiSanPham;
@@ -13,6 +14,7 @@ import Interfaces.Initialize;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import Map.MapLoaiSanPham;
+import Utils.Auth;
 import Utils.DialogBox;
 import Utils.ValidateInput;
 import Utils.NumberFormat;
@@ -38,7 +40,8 @@ enum colSP {
 }
 
 public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initialize<SanPham>,
-        CheckForm<SanPham, String>,CrudController {
+        CheckForm<SanPham, String>, CrudController {
+
     private SanPhamDAO dao = new SanPhamDAO();
     private LoaiSanPhamDAO daoLSP = new LoaiSanPhamDAO();
     private DecimalFormat df = new DecimalFormat("#,###");
@@ -46,22 +49,21 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
     private ChiTietSPDetailJDialog dialog = new ChiTietSPDetailJDialog();
     private ValidateInput input = new ValidateInput();
     private NumberFormat numFormat = new NumberFormat();
-    
+
     /**
      * Creates new form SanPhamDetailJDialog
      */
     public SanPhamDetailJDialog() {
         initComponents();
-        
+
         init();
     }
-    
-    
+
     @Override
     public void init() {
         fillToTable();
         generateCbx();
-        
+
         setLocationRelativeTo(null);
     }
 
@@ -69,7 +71,7 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
     public void fillToTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<SanPham> list = dao.getAllData();
-        
+
         String[] col = {
             "Mã sản phẩm",
             "Loại sản phẩm",
@@ -78,9 +80,9 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
             "Số lượng",
             "Trạng thái"
         };
-        
+
         model.setColumnIdentifiers(col);
-        
+
         for (SanPham o : list) {
             model.addRow(new Object[]{
                 o.getMaSP(),
@@ -88,18 +90,18 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
                 o.getTenSP(),
                 df.format(o.getDonGia()),
                 o.getSoLuong(),
-                o.isTrangThai()?"Còn hàng":"Hết hàng"
-            }); 
+                o.isTrangThai() ? "Còn hàng" : "Hết hàng"
+            });
         }
-        
+
         tblSanPham.setModel(model);
     }
-    
+
     @Override
     public void filterTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<SanPham> list = dao.getDataByValue(txtTenSP.getText());
-        
+
         String[] col = {
             "Mã sản phẩm",
             "Loại sản phẩm",
@@ -108,9 +110,9 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
             "Số lượng",
             "Trạng thái"
         };
-        
+
         model.setColumnIdentifiers(col);
-        
+
         for (SanPham o : list) {
             model.addRow(new Object[]{
                 o.getMaSP(),
@@ -118,36 +120,36 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
                 o.getTenSP(),
                 df.format(o.getDonGia()),
                 o.getSoLuong(),
-                o.isTrangThai()?"Còn hàng":"Hết hàng"
-            }); 
+                o.isTrangThai() ? "Còn hàng" : "Hết hàng"
+            });
         }
-        
+
         tblSanPham.setModel(model);
     }
-    
+
     @Override
     public void generateCbx() {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         List<LoaiSanPham> list = daoLSP.getAllData();
-        
+
         for (LoaiSanPham o : list) {
             model.addElement(o.getTenLoai());
         }
-        
+
         cbxLoaiSanPham.setModel(model);
     }
 
     @Override
     public void setForm(SanPham o) {
         String itemCbx = map.getValueByID(o.getMaLoai());
-        String donGia = String.valueOf((int)o.getDonGia());
-        
+        String donGia = String.valueOf((int) o.getDonGia());
+
         txtMaSP.setText(o.getMaSP());
         cbxLoaiSanPham.setSelectedItem(itemCbx);
         txtTenSP.setText(o.getTenSP());
         txtDonGia.setText(donGia);
         txtSoLuong.setText(String.valueOf(o.getSoLuong()));
-        txtTrangThai.setText(o.isTrangThai()?"Còn hàng":"Hết hàng");
+        txtTrangThai.setText(o.isTrangThai() ? "Còn hàng" : "Hết hàng");
     }
 
     @Override
@@ -158,25 +160,25 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
         String donGia = (String) tblSanPham.getValueAt(index, colSP.DONGIA.i);
         Object soLuong = tblSanPham.getValueAt(index, colSP.SOLUONG.i);
         Object trangThai = tblSanPham.getValueAt(index, colSP.TRANGTHAI.i);
-        
+
         SanPham o = new SanPham(
                 maSP,
                 map.getIDByValue(loai),
                 tenSP,
-                Double.parseDouble(numFormat.removeCommas(donGia)), 
+                Double.parseDouble(numFormat.removeCommas(donGia)),
                 (int) soLuong,
                 trangThai == "Còn hàng"
         );
-        
+
         setForm(o);
     }
-    
+
     @Override
     public void showDetail() {
         int index = tblSanPham.getSelectedRow();
         getForm(index);
     }
-    
+
     @Override
     public boolean isCheckValid() {
         StringBuilder sb = new StringBuilder();
@@ -188,36 +190,36 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
         String patternNumber = "\\d*";
         String patternText = "\\s+";
         int count = 0;
-        
+
         if (maSP.equals("") || maSP.matches(patternText)) {
             sb.append("Bạn chưa nhập mã sản phẩm\n");
             count++;
         }
-        
+
         if (tenSP.equals("") || tenSP.matches(patternText)) {
             sb.append("Bạn chưa nhập tên sản phẩm\n");
             count++;
         }
-        
+
         if (donGia.equals("") || !donGia.matches(patternNumber)) {
             sb.append("Bạn chưa nhập đơn giá. Vui lòng nhập số nguyên\n");
             count++;
         }
-        
+
         if (soLuong.equals("") || !soLuong.matches(patternNumber)) {
             sb.append("Bạn chưa nhập số lượng. Vui lòng nhập số nguyên\n");
             count++;
         }
-        
+
         if (loaiSP == null) {
             sb.append("Bạn chưa chọn loại sản phẩm\n");
             count++;
         }
-        
+
         if (sb.length() > 0) {
-            DialogBox.notice(this, sb.toString()); 
+            DialogBox.notice(this, sb.toString());
         }
-        
+
         return count == 0;
     }
 
@@ -225,9 +227,11 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
     public boolean isCheckContain(List<SanPham> list, String ma) {
         int count = 0;
         for (SanPham o : list) {
-            if (ma.equals(o.getMaSP())) count++;
+            if (ma.equals(o.getMaSP())) {
+                count++;
+            }
         }
-        
+
         return count != 0;
     }
 
@@ -235,7 +239,7 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
     public boolean isCheckDuplicate() {
         String maSP = txtMaSP.getText();
         List<SanPham> list = dao.getAllData();
-        
+
         if (isCheckContain(list, maSP)) {
             DialogBox.notice(this, "Mã sản phẩm này có rồi. Vui lòng nhập mã sản phẩm khác");
             return false;
@@ -248,7 +252,7 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
     public boolean isCheckUpdate() {
         String maSP = txtMaSP.getText();
         List<SanPham> list = dao.getAllData();
-        
+
         if (!isCheckContain(list, maSP)) {
             DialogBox.notice(this, "Không tìm thấy mã sản phẩm cần sửa");
             return false;
@@ -261,7 +265,7 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
     public boolean isCheckDelete() {
         String maSP = txtMaSP.getText();
         List<SanPham> list = dao.getAllData();
-        
+
         if (!isCheckContain(list, maSP)) {
             DialogBox.notice(this, "Không tìm thấy mã sản phẩm cần xóa");
             return false;
@@ -275,20 +279,20 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
         if (isCheckValid()) {
             if (isCheckDuplicate()) {
                 String itemCbx = map.getIDByValue((String) cbxLoaiSanPham.getSelectedItem());
-                
+
                 dao.insertData(new SanPham(
-                        txtMaSP.getText(), 
-                        itemCbx, 
-                        txtTenSP.getText(), 
-                        Double.parseDouble(txtDonGia.getText()), 
-                        Integer.parseInt(txtSoLuong.getText()), 
+                        txtMaSP.getText(),
+                        itemCbx,
+                        txtTenSP.getText(),
+                        Double.parseDouble(txtDonGia.getText()),
+                        Integer.parseInt(txtSoLuong.getText()),
                         "",
                         "",
                         "",
                         "",
                         true
-                )); 
-                
+                ));
+
                 DialogBox.notice(this, "Thêm thành công");
                 fillToTable();
             }
@@ -298,11 +302,11 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
     @Override
     public void reset() {
         SanPham sp = new SanPham(
-                "", 
-                "", 
-                "", 
-                0, 
-                0, 
+                "",
+                "",
+                "",
+                0,
+                0,
                 true
         );
         setForm(sp);
@@ -318,20 +322,20 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
         if (isCheckValid()) {
             if (isCheckUpdate()) {
                 String itemCbx = map.getIDByValue((String) cbxLoaiSanPham.getSelectedItem());
-                
+
                 dao.insertData(new SanPham(
-                        txtMaSP.getText(), 
-                        itemCbx, 
-                        txtTenSP.getText(), 
-                        Double.parseDouble(txtDonGia.getText()), 
-                        Integer.parseInt(txtSoLuong.getText()), 
+                        txtMaSP.getText(),
+                        itemCbx,
+                        txtTenSP.getText(),
+                        Double.parseDouble(txtDonGia.getText()),
+                        Integer.parseInt(txtSoLuong.getText()),
                         "",
                         "",
                         "",
                         "",
                         true
-                )); 
-                
+                ));
+
                 DialogBox.notice(this, "Sửa thành công");
                 fillToTable();
             }
@@ -340,16 +344,20 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
 
     @Override
     public void delete() {
-        if (isCheckDelete()) {
-            if (DialogBox.confirm(this, "Bạn có muốn xóa sản phẩm này không?")){
-                dao.deleteById(txtMaSP.getText());
-                DialogBox.notice(this, "Xóa thành công");
-                fillToTable();
-                reset();
+        if (Auth.isManager()) {
+            if (isCheckDelete()) {
+                if (DialogBox.confirm(this, "Bạn có muốn xóa sản phẩm này không?")) {
+                    dao.deleteById(txtMaSP.getText());
+                    DialogBox.notice(this, "Xóa thành công");
+                    fillToTable();
+                    reset();
+                }
             }
+        } else {
+            DialogBox.notice(this, "Bạn không có quyền xóa");
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -566,20 +574,20 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void txtMaSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaSPActionPerformed
-        input.inputString(txtMaSP,10);
+        input.inputString(txtMaSP, 10);
     }//GEN-LAST:event_txtMaSPActionPerformed
 
     private void txtTenSPKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTenSPKeyPressed
-        input.inputUnicode(txtTenSP,50);
+        input.inputUnicode(txtTenSP, 50);
         filterTable();
     }//GEN-LAST:event_txtTenSPKeyPressed
 
     private void txtDonGiaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDonGiaKeyPressed
-        input.inputNumber(txtDonGia,15);
+        input.inputNumber(txtDonGia, 15);
     }//GEN-LAST:event_txtDonGiaKeyPressed
 
     private void txtSoLuongKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSoLuongKeyPressed
-        input.inputNumber(txtSoLuong,5);
+        input.inputNumber(txtSoLuong, 5);
     }//GEN-LAST:event_txtSoLuongKeyPressed
 
 
@@ -604,7 +612,7 @@ public class SanPhamDetailJDialog extends javax.swing.JFrame implements Initiali
     private javax.swing.JTextField txtTrangThai;
     // End of variables declaration//GEN-END:variables
 
-        @Override
+    @Override
     public boolean isCheckLength() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

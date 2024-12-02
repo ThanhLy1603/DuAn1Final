@@ -14,8 +14,10 @@ import UI.Component.KhachHangJDialog;
 import UI.Component.KhuyenMaiJDialog;
 import UI.Component.NhanVienJDialog;
 import UI.Component.NhapHangJDialog;
+import UI.Component.QuanLyHoaDonJDialog;
 import UI.Component.SanPhamJDialog;
 import Utils.Auth;
+import Utils.DialogBox;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,14 +49,16 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         } else {
             lblVaiTro.setText("Nhân Viên");
         }
-        if(Auth.isLogin()){
-            String tenNhanVien=Auth.user.getTenNV();
+        if (Auth.isLogin()) {
+            String tenNhanVien = Auth.user.getTenNV();
             lblTenNV.setText(tenNhanVien);
         }
     }
 
     @Override
     public void showPanel(JPanel visiblePanel) {
+        pnLichSuHoaDon.setVisible(false);
+        pnHoaDon.setVisible(false);
         pnDoanhThu.setVisible(false);
         pnKhachHang.setVisible(false);
         pnNhanVien.setVisible(false);
@@ -122,13 +126,13 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         pnDoanhThu = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         pnKhachHang = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         pnNhanVien = new javax.swing.JPanel();
         pnSanPham = new javax.swing.JPanel();
         pnKhuyenMai = new javax.swing.JPanel();
         pnNhapHang = new javax.swing.JPanel();
         pnHoaDon = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
+        pnLichSuHoaDon = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -203,6 +207,11 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblThoat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblThoat.setForeground(new java.awt.Color(255, 255, 255));
         lblThoat.setText("Thoát");
+        lblThoat.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblThoatMouseClicked(evt);
+            }
+        });
 
         lblNhapHang.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblNhapHang.setForeground(new java.awt.Color(255, 255, 255));
@@ -336,23 +345,15 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
 
         pnContainers.add(pnDoanhThu, "card2");
 
-        jLabel2.setText("Khách Hàng");
-
         javax.swing.GroupLayout pnKhachHangLayout = new javax.swing.GroupLayout(pnKhachHang);
         pnKhachHang.setLayout(pnKhachHangLayout);
         pnKhachHangLayout.setHorizontalGroup(
             pnKhachHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnKhachHangLayout.createSequentialGroup()
-                .addGap(511, 511, 511)
-                .addComponent(jLabel2)
-                .addContainerGap(504, Short.MAX_VALUE))
+            .addGap(0, 1080, Short.MAX_VALUE)
         );
         pnKhachHangLayout.setVerticalGroup(
             pnKhachHangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnKhachHangLayout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(jLabel2)
-                .addContainerGap(689, Short.MAX_VALUE))
+            .addGap(0, 797, Short.MAX_VALUE)
         );
 
         pnContainers.add(pnKhachHang, "card3");
@@ -418,9 +419,9 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         pnHoaDonLayout.setHorizontalGroup(
             pnHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnHoaDonLayout.createSequentialGroup()
-                .addContainerGap(370, Short.MAX_VALUE)
+                .addContainerGap(328, Short.MAX_VALUE)
                 .addComponent(jLabel6)
-                .addGap(409, 409, 409))
+                .addGap(452, 452, 452))
         );
         pnHoaDonLayout.setVerticalGroup(
             pnHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -431,6 +432,19 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         );
 
         pnContainers.add(pnHoaDon, "card2");
+
+        javax.swing.GroupLayout pnLichSuHoaDonLayout = new javax.swing.GroupLayout(pnLichSuHoaDon);
+        pnLichSuHoaDon.setLayout(pnLichSuHoaDonLayout);
+        pnLichSuHoaDonLayout.setHorizontalGroup(
+            pnLichSuHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1080, Short.MAX_VALUE)
+        );
+        pnLichSuHoaDonLayout.setVerticalGroup(
+            pnLichSuHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 797, Short.MAX_VALUE)
+        );
+
+        pnContainers.add(pnLichSuHoaDon, "card9");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -466,16 +480,25 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblLichSuBanHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLichSuBanHangMouseClicked
-
+        if (Auth.isManager()) {
+            showPanel(pnLichSuHoaDon);
+            //Khởi tạo đố tượng
+            QuanLyHoaDonJDialog dialog = new QuanLyHoaDonJDialog();
+            showDialogInPanel(pnLichSuHoaDon, dialog);
+        } else
+            DialogBox.notice(this, "Bạn không có quyền truy cập");
     }//GEN-LAST:event_lblLichSuBanHangMouseClicked
 
     private void lblDoanhThuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblDoanhThuMouseClicked
         // TODO add your handling code here:
         //Hiên thị panel và ẩn panel
-        showPanel(pnDoanhThu);
-        //Khởi tạo đố tượng
-        DoanhThuJDialog dialog = new DoanhThuJDialog();
-        showDialogInPanel(pnDoanhThu, dialog);
+        if (Auth.isManager()) {
+            showPanel(pnDoanhThu);
+            //Khởi tạo đố tượng
+            DoanhThuJDialog dialog = new DoanhThuJDialog();
+            showDialogInPanel(pnDoanhThu, dialog);
+        } else
+            DialogBox.notice(this, "Bạn không có quyền truy cập");
     }//GEN-LAST:event_lblDoanhThuMouseClicked
 
     private void lblKhachHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKhachHangMouseClicked
@@ -487,9 +510,14 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
 
     private void lblNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNhanVienMouseClicked
         // TODO add your handling code here:
-        showPanel(pnNhanVien);
-        NhanVienJDialog dialog = new NhanVienJDialog();
-        showDialogInPanel(pnNhanVien, dialog);
+        if (Auth.isManager()) {
+            showPanel(pnNhanVien);
+            NhanVienJDialog dialog = new NhanVienJDialog();
+            showDialogInPanel(pnNhanVien, dialog);
+        } else {
+            DialogBox.notice(this, "Bạn không có quyền truy cập");
+        }
+
     }//GEN-LAST:event_lblNhanVienMouseClicked
 
     private void lblSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSanPhamMouseClicked
@@ -502,16 +530,26 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
 
     private void lblKhuyenMaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKhuyenMaiMouseClicked
         // TODO add your handling code here:
-        showPanel(pnKhuyenMai);
-        KhuyenMaiJDialog dialog = new KhuyenMaiJDialog();
-        showDialogInPanel(pnKhuyenMai, dialog);
+        if (Auth.isManager()) {
+            showPanel(pnKhuyenMai);
+            KhuyenMaiJDialog dialog = new KhuyenMaiJDialog();
+            showDialogInPanel(pnKhuyenMai, dialog);
+        } else {
+            DialogBox.notice(this, "Bạn không có quyền truy cập");
+        }
+
     }//GEN-LAST:event_lblKhuyenMaiMouseClicked
 
     private void lblNhapHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNhapHangMouseClicked
         // TODO add your handling code here:
-        showPanel(pnNhapHang);
-        NhapHangJDialog dialog = new NhapHangJDialog();
-        showDialogInPanel(pnNhapHang, dialog);
+        if (Auth.isManager()) {
+            showPanel(pnNhapHang);
+            NhapHangJDialog dialog = new NhapHangJDialog();
+            showDialogInPanel(pnNhapHang, dialog);
+        } else {
+            DialogBox.notice(this, "Bạn không có quyền truy cập");
+        }
+
     }//GEN-LAST:event_lblNhapHangMouseClicked
 
     private void lblDoiMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblDoiMatKhauMouseClicked
@@ -530,6 +568,13 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
             Logger.getLogger(MenuJDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_lblHoaDonMouseClicked
+
+    private void lblThoatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblThoatMouseClicked
+        // TODO add your handling code here:
+        if(DialogBox.confirm(this, "Bạn có muốn thoát không?")){
+             System.exit(0);
+        }
+    }//GEN-LAST:event_lblThoatMouseClicked
 
     /**
      * @param args the command line arguments
@@ -567,7 +612,6 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -589,6 +633,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
     private javax.swing.JPanel pnHoaDon;
     private javax.swing.JPanel pnKhachHang;
     private javax.swing.JPanel pnKhuyenMai;
+    private javax.swing.JPanel pnLichSuHoaDon;
     private javax.swing.JPanel pnNhanVien;
     private javax.swing.JPanel pnNhapHang;
     private javax.swing.JPanel pnSanPham;

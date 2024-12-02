@@ -67,6 +67,11 @@ public class LoginJDialog extends javax.swing.JFrame implements CheckForm<NhanVi
 
         btnReset.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -140,6 +145,11 @@ public class LoginJDialog extends javax.swing.JFrame implements CheckForm<NhanVi
         login();
     }//GEN-LAST:event_btnLoginActionPerformed
 
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        reset();
+    }//GEN-LAST:event_btnResetActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -189,6 +199,11 @@ public class LoginJDialog extends javax.swing.JFrame implements CheckForm<NhanVi
     // End of variables declaration//GEN-END:variables
     NhanVienDao dao = new NhanVienDao();
     NhanVien nv = new NhanVien();
+    
+    public void reset(){
+        txtUsername.setText("");
+        txtpassword.setText("");
+    }
 
     public void login() {
         String username = txtUsername.getText();

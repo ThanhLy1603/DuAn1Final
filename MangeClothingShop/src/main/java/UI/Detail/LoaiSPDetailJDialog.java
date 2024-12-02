@@ -9,10 +9,12 @@ import Interfaces.CheckForm;
 import Interfaces.CrudController;
 import Interfaces.Initialize;
 import Entity.LoaiSanPham;
+import Utils.Auth;
 import Utils.DialogBox;
 import Utils.ValidateInput;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ADMIN
@@ -21,31 +23,32 @@ enum colLoaiSP {
     MALOAI(0),
     TENLOAI(1);
     int i;
-    
+
     private colLoaiSP(int i) {
         this.i = i;
     }
 }
+
 public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initialize<LoaiSanPham>,
         CheckForm<LoaiSanPham, String>, CrudController {
+
     private LoaiSanPhamDAO dao = new LoaiSanPhamDAO();
     private SanPhamDetailJDialog dialog = new SanPhamDetailJDialog();
     private ValidateInput input = new ValidateInput();
-    
+
     /**
      * Creates new form LoaiSPDetailJDialog
      */
     public LoaiSPDetailJDialog() {
         initComponents();
-        
+
         init();
     }
-    
-    
+
     @Override
     public void init() {
         fillToTable();
-        
+
         setLocationRelativeTo(null);
     }
 
@@ -53,46 +56,46 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     public void fillToTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<LoaiSanPham> list = dao.getAllData();
-        
+
         String[] col = {
             "Mã loại",
             "Tên loại"
         };
-        
+
         model.setColumnIdentifiers(col);
-        
+
         for (LoaiSanPham o : list) {
             model.addRow(new Object[]{
                 o.getMaLoai(),
                 o.getTenLoai()
             });
         }
-        
+
         tblThuocTinhSanPham.setModel(model);
     }
-    
+
     @Override
     public void filterTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<LoaiSanPham> list = dao.getDataByValue(txtTenLoai.getText());
-        
+
         String[] col = {
             "Mã loại",
             "Tên loại"
         };
-        
+
         model.setColumnIdentifiers(col);
-        
+
         for (LoaiSanPham o : list) {
             model.addRow(new Object[]{
                 o.getMaLoai(),
                 o.getTenLoai()
             });
         }
-        
+
         tblThuocTinhSanPham.setModel(model);
     }
-    
+
     @Override
     public void setForm(LoaiSanPham o) {
         txtMaLoai.setText(o.getMaLoai());
@@ -103,7 +106,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     public void getForm(int index) {
         String maLoai = (String) tblThuocTinhSanPham.getValueAt(index, colLoaiSP.MALOAI.i);
         String tenLoai = (String) tblThuocTinhSanPham.getValueAt(index, colLoaiSP.TENLOAI.i);
-        
+
         LoaiSanPham o = new LoaiSanPham(maLoai, tenLoai);
         setForm(o);
     }
@@ -121,21 +124,21 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
         String ten = txtTenLoai.getText();
         String patternText = "\\s+";
         int count = 0;
-        
+
         if (ma.equals("") || ma.matches(patternText)) {
             sb.append("Bạn chưa nhập mã sản phẩm\n");
             count++;
         }
-        
+
         if (ten.equals("") || ten.matches(patternText)) {
             sb.append("Bạn chưa nhập tên\n");
             count++;
         }
-        
+
         if (sb.length() > 0) {
             DialogBox.notice(this, sb.toString());
         }
-        
+
         return count == 0;
     }
 
@@ -143,9 +146,11 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     public boolean isCheckContain(List<LoaiSanPham> list, String ma) {
         int count = 0;
         for (LoaiSanPham o : list) {
-            if (ma.equals(o.getMaLoai())) count++;
+            if (ma.equals(o.getMaLoai())) {
+                count++;
+            }
         }
-        
+
         return count != 0;
     }
 
@@ -153,7 +158,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     public boolean isCheckDuplicate() {
         List<LoaiSanPham> list = dao.getAllData();
         String ma = txtMaLoai.getText();
-        
+
         if (isCheckContain(list, ma)) {
             DialogBox.notice(this, "Mã loại này có rồi. Vui lòng nhập mã loại khác");
             return false;
@@ -166,7 +171,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     public boolean isCheckUpdate() {
         List<LoaiSanPham> list = dao.getAllData();
         String ma = txtMaLoai.getText();
-        
+
         if (!isCheckContain(list, ma)) {
             DialogBox.notice(this, "Không tìm thấy loại sản phẩm cần sửa");
             return false;
@@ -179,7 +184,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     public boolean isCheckDelete() {
         List<LoaiSanPham> list = dao.getAllData();
         String ma = txtMaLoai.getText();
-        
+
         if (!isCheckContain(list, ma)) {
             DialogBox.notice(this, "Không tìm thấy loại sản phẩm cần xóa");
             return false;
@@ -194,8 +199,8 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
             if (isCheckDuplicate()) {
                 String ma = txtMaLoai.getText();
                 String ten = txtTenLoai.getText();
-                
-                dao.insertData(new LoaiSanPham(ma, ten)); 
+
+                dao.insertData(new LoaiSanPham(ma, ten));
                 DialogBox.notice(this, "Thêm thành công");
                 fillToTable();
             }
@@ -205,10 +210,10 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     @Override
     public void reset() {
         LoaiSanPham o = new LoaiSanPham(
-                "", 
+                "",
                 ""
         );
-        
+
         setForm(o);
     }
 
@@ -218,8 +223,8 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
             if (isCheckUpdate()) {
                 String ma = txtMaLoai.getText();
                 String ten = txtTenLoai.getText();
-                
-                dao.updateData(new LoaiSanPham(ma, ten)); 
+
+                dao.updateData(new LoaiSanPham(ma, ten));
                 DialogBox.notice(this, "Sửa thành công");
                 fillToTable();
             }
@@ -228,16 +233,20 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
 
     @Override
     public void delete() {
-        if (isCheckDelete()) {
-            if (DialogBox.confirm(this, "Bạn có muốn xóa loại sản phẩm này không?")) {
-                dao.deleteById(txtMaLoai.getText());
-                DialogBox.notice(this, "Xóa thành công");
-                fillToTable();
-                reset();
+        if (Auth.isManager()) {
+            if (isCheckDelete()) {
+                if (DialogBox.confirm(this, "Bạn có muốn xóa loại sản phẩm này không?")) {
+                    dao.deleteById(txtMaLoai.getText());
+                    DialogBox.notice(this, "Xóa thành công");
+                    fillToTable();
+                    reset();
+                }
             }
+        } else {
+            DialogBox.alert(this, "Bạn không có quyền xóa");
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -521,7 +530,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     public void generateCbx() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public boolean isCheckLength() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
