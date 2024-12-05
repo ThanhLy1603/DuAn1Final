@@ -6,6 +6,7 @@ package UI.main;
 import DAO.NhanVienDao;
 import Entity.NhanVien;
 import Interfaces.CheckForm;
+import Interfaces.CrudController;
 import Interfaces.Initialize;
 import Utils.Auth;
 import Utils.DialogBox;
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author PHONG
  */
-public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String, NhanVien>,Initialize<NhanVien>{
+public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String, NhanVien>,Initialize<NhanVien>, CrudController{
     private ValidateInput input = new ValidateInput();
     /**
      * Creates new form DoiMK
@@ -42,7 +43,9 @@ public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String
         }else{
             Auth.user.setMatKhau(maKhauMoi);
             dao.updateData(Auth.user);
+            reset();
             DialogBox.notice(this, "Đổi mật khẩu thành công");
+            
         }
     }
     private void huyBo(){
@@ -54,6 +57,12 @@ public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String
        txtTenTK.setText(Auth.user.getMaNV());
        btnCapNhat.addActionListener(e ->doiMatKhau());
        btnHuyBo.addActionListener(e ->huyBo());
+    }
+    @Override
+    public void reset() {
+        txtmk1.setText("");
+        txtmk2.setText("");
+        txtmk3.setText("");
     }
     
      @Override
@@ -122,21 +131,18 @@ public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String
             }
         });
 
-        txtmk1.setText("jPasswordField1");
         txtmk1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtmk1KeyPressed(evt);
             }
         });
 
-        txtmk2.setText("jPasswordField1");
         txtmk2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtmk2KeyPressed(evt);
             }
         });
 
-        txtmk3.setText("jPasswordField1");
         txtmk3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtmk3KeyPressed(evt);
@@ -327,6 +333,22 @@ public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String
 
     @Override
     public void showDetail() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void create() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+
+    @Override
+    public void update() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void delete() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

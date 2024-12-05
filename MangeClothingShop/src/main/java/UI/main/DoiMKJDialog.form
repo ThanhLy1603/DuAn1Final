@@ -156,25 +156,16 @@
       </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="txtmk1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-      </Properties>
       <Events>
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtmk1KeyPressed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="txtmk2">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-      </Properties>
       <Events>
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtmk2KeyPressed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="txtmk3">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-      </Properties>
       <Events>
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtmk3KeyPressed"/>
       </Events>

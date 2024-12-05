@@ -231,7 +231,7 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
                         txtSDT.getText(), // Số điện thoại
                         txtEmail.getText()
                 )); // Email
-                DialogBox.notice(this, "tạo Thành công");
+                DialogBox.notice(this, "Tạo Thành công");
                 reset();
                 fillToTable();
             }
@@ -912,7 +912,7 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
     }//GEN-LAST:event_txtSDTKeyPressed
 
     private void txtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyPressed
-        input.inputSymbol(txtEmail);
+
     }//GEN-LAST:event_txtEmailKeyPressed
 
     private void txtLuongKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLuongKeyPressed
