@@ -9,6 +9,7 @@ import Interfaces.CheckForm;
 import Interfaces.Initialize;
 import Utils.Auth;
 import Utils.DialogBox;
+import Utils.ValidateInput;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
  * @author PHONG
  */
 public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String, NhanVien>,Initialize<NhanVien>{
-
+    private ValidateInput input = new ValidateInput();
     /**
      * Creates new form DoiMK
      */
@@ -28,10 +29,10 @@ public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String
     NhanVienDao dao=new NhanVienDao();
     
     public void doiMatKhau(){
-        String maNV=txtTenTK.getText();
-        String maKhau=new String(txtmk1.getText());
-        String maKhauMoi=new String(txtmk2.getText());
-        String maKhauCheck=new String(txtmk3.getText());
+        String maNV = txtTenTK.getText();
+        String maKhau = new String(txtmk1.getText());
+        String maKhauMoi = new String(txtmk2.getText());
+        String maKhauCheck = new String(txtmk3.getText());
         if(!maKhau.equalsIgnoreCase(Auth.user.getMatKhau())){
             DialogBox.alert(this,"Sai mật khẩu!");
         }else if(maKhauMoi.equals(maKhau)){
@@ -90,6 +91,11 @@ public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String
         jLabel2.setText("Tên tài khoản");
 
         txtTenTK.setEditable(false);
+        txtTenTK.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                txtTenTKMousePressed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setText("Mật khẩu hiện tại");
@@ -102,18 +108,38 @@ public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String
 
         btnCapNhat.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnCapNhat.setText("Cập nhật");
+        btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCapNhatActionPerformed(evt);
+            }
+        });
 
         btnHuyBo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnHuyBo.setText("Hủy bỏ");
+        btnHuyBo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHuyBoActionPerformed(evt);
+            }
+        });
 
         txtmk1.setText("jPasswordField1");
+        txtmk1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtmk1KeyPressed(evt);
+            }
+        });
 
         txtmk2.setText("jPasswordField1");
+        txtmk2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtmk2KeyPressed(evt);
+            }
+        });
 
         txtmk3.setText("jPasswordField1");
-        txtmk3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtmk3ActionPerformed(evt);
+        txtmk3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtmk3KeyPressed(evt);
             }
         });
 
@@ -175,9 +201,29 @@ public class DoiMKJDialog extends javax.swing.JFrame implements CheckForm<String
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtmk3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtmk3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtmk3ActionPerformed
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
+        doiMatKhau();
+    }//GEN-LAST:event_btnCapNhatActionPerformed
+
+    private void btnHuyBoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyBoActionPerformed
+        huyBo();
+    }//GEN-LAST:event_btnHuyBoActionPerformed
+
+    private void txtmk1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmk1KeyPressed
+        input.inputString(txtmk1, 50);
+    }//GEN-LAST:event_txtmk1KeyPressed
+
+    private void txtmk2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmk2KeyPressed
+        input.inputString(txtmk2, 50);
+    }//GEN-LAST:event_txtmk2KeyPressed
+
+    private void txtmk3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmk3KeyPressed
+        input.inputString(txtmk3, 50);
+    }//GEN-LAST:event_txtmk3KeyPressed
+
+    private void txtTenTKMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTenTKMousePressed
+        input.inputString(txtTenTK, 10);
+    }//GEN-LAST:event_txtTenTKMousePressed
 
     /**
      * @param args the command line arguments

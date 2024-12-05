@@ -144,6 +144,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblLichSuBanHang.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblLichSuBanHang.setForeground(new java.awt.Color(255, 255, 255));
         lblLichSuBanHang.setText("Lịch Sử Bán Hàng");
+        lblLichSuBanHang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblLichSuBanHang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblLichSuBanHangMouseClicked(evt);
@@ -153,6 +154,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblSanPham.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblSanPham.setForeground(new java.awt.Color(255, 255, 255));
         lblSanPham.setText("Sản Phẩm");
+        lblSanPham.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblSanPhamMouseClicked(evt);
@@ -162,6 +164,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblHoaDon.setForeground(new java.awt.Color(255, 255, 255));
         lblHoaDon.setText("Hóa đơn");
+        lblHoaDon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblHoaDonMouseClicked(evt);
@@ -171,6 +174,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblKhuyenMai.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblKhuyenMai.setForeground(new java.awt.Color(255, 255, 255));
         lblKhuyenMai.setText("Khuyến Mại");
+        lblKhuyenMai.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblKhuyenMai.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblKhuyenMaiMouseClicked(evt);
@@ -180,6 +184,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblNhanVien.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblNhanVien.setForeground(new java.awt.Color(255, 255, 255));
         lblNhanVien.setText("Nhân Viên");
+        lblNhanVien.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblNhanVienMouseClicked(evt);
@@ -189,6 +194,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblKhachHang.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblKhachHang.setForeground(new java.awt.Color(255, 255, 255));
         lblKhachHang.setText("Khách Hàng");
+        lblKhachHang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblKhachHang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblKhachHangMouseClicked(evt);
@@ -198,6 +204,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblDoanhThu.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblDoanhThu.setForeground(new java.awt.Color(255, 255, 255));
         lblDoanhThu.setText("Thống Kê");
+        lblDoanhThu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblDoanhThu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblDoanhThuMouseClicked(evt);
@@ -207,6 +214,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblThoat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblThoat.setForeground(new java.awt.Color(255, 255, 255));
         lblThoat.setText("Thoát");
+        lblThoat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblThoat.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblThoatMouseClicked(evt);
@@ -216,6 +224,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblNhapHang.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblNhapHang.setForeground(new java.awt.Color(255, 255, 255));
         lblNhapHang.setText("Nhập  Hàng");
+        lblNhapHang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblNhapHang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblNhapHangMouseClicked(evt);
@@ -263,6 +272,7 @@ public class MenuJDialog extends javax.swing.JFrame implements Panel {
         lblDoiMatKhau.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblDoiMatKhau.setForeground(new java.awt.Color(255, 255, 255));
         lblDoiMatKhau.setText("Đổi Mật Khẩu");
+        lblDoiMatKhau.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblDoiMatKhau.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblDoiMatKhauMouseClicked(evt);

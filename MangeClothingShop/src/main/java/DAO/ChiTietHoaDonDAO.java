@@ -24,7 +24,7 @@ public class ChiTietHoaDonDAO implements DAO<ChiTietHoaDon, String>{
     public List<ChiTietHoaDon> getAllData() {
         List<ChiTietHoaDon> list = new ArrayList<>();
         
-        String sql = "SELECT * FROM ChiTietHoaDon";
+        String sql = "SELECT * FROM ChiTietHoaDon ORDER BY MaHD";
         Object[] values = {};
         
         ResultSet rs = JDBC.executeQuery(sql, values);

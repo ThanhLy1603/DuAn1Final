@@ -106,47 +106,54 @@ public class SanPhamJDialog extends javax.swing.JFrame implements Panel{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 
         tabSanPham.setLayout(new java.awt.CardLayout());
+
+        panelSanPham.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout panelSanPhamLayout = new javax.swing.GroupLayout(panelSanPham);
         panelSanPham.setLayout(panelSanPhamLayout);
         panelSanPhamLayout.setHorizontalGroup(
             panelSanPhamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1055, Short.MAX_VALUE)
+            .addGap(0, 1051, Short.MAX_VALUE)
         );
         panelSanPhamLayout.setVerticalGroup(
             panelSanPhamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 722, Short.MAX_VALUE)
+            .addGap(0, 718, Short.MAX_VALUE)
         );
 
         tabSanPham.add(panelSanPham, "card2");
 
         jTabbedPane1.addTab("Sản phẩm", tabSanPham);
 
+        pnlChiTietSanPham.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         javax.swing.GroupLayout pnlChiTietSanPhamLayout = new javax.swing.GroupLayout(pnlChiTietSanPham);
         pnlChiTietSanPham.setLayout(pnlChiTietSanPhamLayout);
         pnlChiTietSanPhamLayout.setHorizontalGroup(
             pnlChiTietSanPhamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1055, Short.MAX_VALUE)
+            .addGap(0, 1051, Short.MAX_VALUE)
         );
         pnlChiTietSanPhamLayout.setVerticalGroup(
             pnlChiTietSanPhamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 722, Short.MAX_VALUE)
+            .addGap(0, 718, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Chi tiết sản phẩm", pnlChiTietSanPham);
+
+        pnlLoaiSanPham.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout pnlLoaiSanPhamLayout = new javax.swing.GroupLayout(pnlLoaiSanPham);
         pnlLoaiSanPham.setLayout(pnlLoaiSanPhamLayout);
         pnlLoaiSanPhamLayout.setHorizontalGroup(
             pnlLoaiSanPhamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1055, Short.MAX_VALUE)
+            .addGap(0, 1051, Short.MAX_VALUE)
         );
         pnlLoaiSanPhamLayout.setVerticalGroup(
             pnlLoaiSanPhamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 722, Short.MAX_VALUE)
+            .addGap(0, 718, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Loại sản phẩm", pnlLoaiSanPham);

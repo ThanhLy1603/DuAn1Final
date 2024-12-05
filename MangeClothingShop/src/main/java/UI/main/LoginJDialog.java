@@ -10,6 +10,7 @@ import Utils.Auth;
 import Utils.DialogBox;
 import javax.swing.JDialog;
 import Interfaces.CheckForm;
+import Utils.ValidateInput;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
  * @author PHONG
  */
 public class LoginJDialog extends javax.swing.JFrame implements CheckForm<NhanVien, String> {
-
+    private ValidateInput input = new ValidateInput();
     /**
      * Creates new form Login1
      */
@@ -53,6 +54,12 @@ public class LoginJDialog extends javax.swing.JFrame implements CheckForm<NhanVi
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel3.setText("Username");
+
+        txtUsername.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtUsernameKeyPressed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel4.setText("Password");
@@ -93,6 +100,12 @@ public class LoginJDialog extends javax.swing.JFrame implements CheckForm<NhanVi
                 .addComponent(jLabel5)
                 .addContainerGap(131, Short.MAX_VALUE))
         );
+
+        txtpassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtpasswordKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,6 +162,14 @@ public class LoginJDialog extends javax.swing.JFrame implements CheckForm<NhanVi
         // TODO add your handling code here:
         reset();
     }//GEN-LAST:event_btnResetActionPerformed
+
+    private void txtUsernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsernameKeyPressed
+        input.inputString(txtUsername, 10);
+    }//GEN-LAST:event_txtUsernameKeyPressed
+
+    private void txtpasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpasswordKeyPressed
+        input.inputString(txtpassword, 50);
+    }//GEN-LAST:event_txtpasswordKeyPressed
 
     /**
      * @param args the command line arguments
@@ -215,7 +236,7 @@ public class LoginJDialog extends javax.swing.JFrame implements CheckForm<NhanVi
             } else if (!password.equals(nv.getMatKhau())) {
                 DialogBox.alert(this, "Sai Mật Khẩu");
             } else {
-                DialogBox.alert(this, "Đăng Nhập Thành Công");
+                DialogBox.notice(this, "Đăng Nhập Thành Công");
                 Auth.user = nv;
                 this.setVisible(false);
                 MenuJDialog dialog = new MenuJDialog();

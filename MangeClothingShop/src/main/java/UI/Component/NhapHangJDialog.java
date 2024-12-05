@@ -229,15 +229,13 @@ public class NhapHangJDialog extends javax.swing.JFrame implements Initialize<Nh
 
     @Override
     public void reset() {
-        NhapHang nh = new NhapHang(
-                0,
-                mapsp.getIDByValue(cbxMaSanPham.getItemAt(0)),
-                new Date(0 - 1900, 01, 0),
-                0
-        );
-        setForm(nh);
-        txtMaNH.setText("");
-        txtNgayNhapHang.setText("");
+//        NhapHang nh = new NhapHang(
+//                0,
+//                mapsp.getIDByValue(cbxMaSanPham.getItemAt(0)),
+//                new Date(0 - 1900, 01, 0),
+//                0
+//        );
+//        setForm(nh);
         txtSoLuongHang.setText("");
     }
 
@@ -298,7 +296,7 @@ public class NhapHangJDialog extends javax.swing.JFrame implements Initialize<Nh
         jLabel2.setText("Mã nhập hàng :");
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel3.setText("Mã sản phẩm :");
+        jLabel3.setText("Tên sản phẩm :");
 
         txtNgayNhapHang.setEnabled(false);
 

@@ -56,7 +56,9 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     public void fillToTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<LoaiSanPham> list = dao.getAllData();
-
+        
+        list.removeIf(o -> o.getMaLoai().equals("NONE"));
+                
         String[] col = {
             "Mã loại",
             "Tên loại"
@@ -69,9 +71,13 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
                 o.getMaLoai(),
                 o.getTenLoai()
             });
+            
+            System.out.println(o.toString());
         }
-
-        tblThuocTinhSanPham.setModel(model);
+        
+        tblLoaiSanPham.setModel(model);
+        
+        
     }
 
     @Override
@@ -93,7 +99,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
             });
         }
 
-        tblThuocTinhSanPham.setModel(model);
+        tblLoaiSanPham.setModel(model);
     }
 
     @Override
@@ -104,8 +110,8 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
 
     @Override
     public void getForm(int index) {
-        String maLoai = (String) tblThuocTinhSanPham.getValueAt(index, colLoaiSP.MALOAI.i);
-        String tenLoai = (String) tblThuocTinhSanPham.getValueAt(index, colLoaiSP.TENLOAI.i);
+        String maLoai = (String) tblLoaiSanPham.getValueAt(index, colLoaiSP.MALOAI.i);
+        String tenLoai = (String) tblLoaiSanPham.getValueAt(index, colLoaiSP.TENLOAI.i);
 
         LoaiSanPham o = new LoaiSanPham(maLoai, tenLoai);
         setForm(o);
@@ -113,7 +119,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
 
     @Override
     public void showDetail() {
-        int index = tblThuocTinhSanPham.getSelectedRow();
+        int index = tblLoaiSanPham.getSelectedRow();
         getForm(index);
     }
 
@@ -269,7 +275,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
         btnXoa = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblThuocTinhSanPham = new javax.swing.JTable();
+        tblLoaiSanPham = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -367,7 +373,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
-        tblThuocTinhSanPham.setModel(new javax.swing.table.DefaultTableModel(
+        tblLoaiSanPham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -378,12 +384,12 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
                 "Mã loại", "Tên loại"
             }
         ));
-        tblThuocTinhSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblLoaiSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblThuocTinhSanPhamMouseClicked(evt);
+                tblLoaiSanPhamMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(tblThuocTinhSanPham);
+        jScrollPane3.setViewportView(tblLoaiSanPham);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -449,9 +455,9 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tblThuocTinhSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblThuocTinhSanPhamMouseClicked
+    private void tblLoaiSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLoaiSanPhamMouseClicked
         showDetail();
-    }//GEN-LAST:event_tblThuocTinhSanPhamMouseClicked
+    }//GEN-LAST:event_tblLoaiSanPhamMouseClicked
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         create();
@@ -521,7 +527,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable tblThuocTinhSanPham;
+    private javax.swing.JTable tblLoaiSanPham;
     private javax.swing.JTextField txtMaLoai;
     private javax.swing.JTextField txtTenLoai;
     // End of variables declaration//GEN-END:variables

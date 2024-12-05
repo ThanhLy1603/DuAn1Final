@@ -65,7 +65,14 @@ public class KhachHang {
     public void setSoDT(String soDT) {
         this.soDT = soDT;
     }
-
+    
+    public boolean isNam() {
+        return isGioiTinh();
+    }
+    
+    public boolean isNu() {
+        return !isGioiTinh();
+    }
     @Override
     public String toString() {
         return "KhachHang{" + "maKH=" + maKH + ", tenKH=" + tenKH + ", gioiTinh=" + gioiTinh + ", diaChi=" + diaChi + ", soDT=" + soDT + '}';

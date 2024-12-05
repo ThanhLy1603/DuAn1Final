@@ -45,8 +45,8 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
             "Mã khách hàng",
             "Tên khách hàng",
             "Giới tính",
-            "Số điện thoại",
-            "Địa chỉ"
+            "Địa chỉ",
+            "Số điện thoại"
         };
 
         model.setColumnIdentifiers(col);
@@ -56,7 +56,8 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                 o.getMaKH(),
                 o.getTenKH(),
                 o.isGioiTinh() ? "Nam" : "Nữ",
-                o.getDiaChi()
+                o.getDiaChi(),
+                o.getSoDT()
             });
         }
         tblKhachHang.setModel(model);
@@ -71,8 +72,8 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
             "Mã khách hàng",
             "Tên khách hàng",
             "Giới tính",
-            "Số điện thoại",
-            "Địa chỉ"
+            "Địa chỉ",
+            "Số điện thoại"
         };
 
         model.setColumnIdentifiers(col);
@@ -82,8 +83,8 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                 o.getMaKH(),
                 o.getTenKH(),
                 o.isGioiTinh() ? "Nam" : "Nữ",
-                o.getSoDT(),
-                o.getDiaChi()
+                o.getDiaChi(),
+                o.getSoDT()
             });
         }
         tblKhachHang.setModel(model);
@@ -101,12 +102,16 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         String gioiTinhStr = (String) tblKhachHang.getValueAt(index, 2);
         String sdt = (String) tblKhachHang.getValueAt(index, 3);
         String diachi = (String) tblKhachHang.getValueAt(index, 4);
-
         boolean gioiTinh = gioiTinhStr.equals("Nam");
-        rdnNam.setSelected(gioiTinh);
-        rdnNu.setSelected(gioiTinh);
 
-        KhachHang kh = new KhachHang(maKH, tenKH, gioiTinh, sdt, diachi);
+        KhachHang kh = new KhachHang(
+                maKH, 
+                tenKH,
+                gioiTinh, 
+                sdt, 
+                diachi
+        );
+        
         setForm(kh);
     }
 
@@ -120,8 +125,8 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
     public void setForm(KhachHang o) {
         txtMaKH.setText(o.getMaKH());
         txtTenKH.setText(o.getTenKH());
-        rdnNam.setSelected(o.isGioiTinh());
-        rdnNu.setSelected(o.isGioiTinh());
+        rdnNam.setSelected(o.isNam());
+        rdnNu.setSelected(o.isNu());
         txtSDT.setText(o.getSoDT());
         txaDiaChi.setText(o.getDiaChi());
     }
@@ -319,21 +324,27 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setName(""); // NOI18N
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Mã khách hàng:");
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Tên khách hàng:");
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Giới tính:");
 
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel4.setText("Số điện thoại:");
 
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Địa chỉ");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        btnAdd.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnAdd.setText("Thêm");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -341,6 +352,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
             }
         });
 
+        btnDelete.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnDelete.setText("Xóa");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -348,6 +360,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
             }
         });
 
+        btnSua.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnSua.setText("Sửa");
         btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -355,6 +368,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
             }
         });
 
+        btnRenew.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         btnRenew.setText("Làm mới");
         btnRenew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -389,18 +403,21 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
+        txtMaKH.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtMaKH.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtMaKHKeyPressed(evt);
             }
         });
 
+        txtTenKH.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtTenKH.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtTenKHKeyPressed(evt);
             }
         });
 
+        txtSDT.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtSDT.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtSDTKeyPressed(evt);
@@ -408,12 +425,15 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         });
 
         btgrGioiTinh.add(rdnNam);
+        rdnNam.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         rdnNam.setText("Nam");
 
         btgrGioiTinh.add(rdnNu);
+        rdnNu.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         rdnNu.setText("Nữ");
 
         txaDiaChi.setColumns(20);
+        txaDiaChi.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txaDiaChi.setRows(5);
         jScrollPane3.setViewportView(txaDiaChi);
 
@@ -442,7 +462,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                         .addGap(42, 42, 42)
                         .addComponent(jLabel6)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
                 .addGap(47, 47, 47)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(92, 92, 92))
@@ -475,8 +495,9 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                 .addContainerGap())
         );
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel7.setText("Tìm kiếm:");
 
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -485,6 +506,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
             }
         });
 
+        tblKhachHang.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tblKhachHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -515,7 +537,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                         .addComponent(jLabel7)
                         .addGap(38, 38, 38)
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 738, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -529,8 +551,10 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Thiết lập thông tin khách hàng");
 
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel9.setText("Thông tin khách hàng");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -550,7 +574,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                     .addGroup(layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

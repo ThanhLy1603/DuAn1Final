@@ -9,13 +9,14 @@ import DAO.HoaDonDao;
 import DAO.NhanVienDao;
 import Entity.ChiTietHoaDon;
 import Entity.HoaDon;
-import Entity.NhanVien;
 import Interfaces.Initialize;
+import Map.MapChiTietSanPham;
+import Map.MapKhachHang;
+import Map.MapKhuyenMai;
+import Map.MapNhanVien;
+import Map.MapSanPham;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,7 +24,10 @@ import javax.swing.table.DefaultTableModel;
  * @author hp
  */
 public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initialize<HoaDon> {
-
+    private MapNhanVien mapNV = new MapNhanVien();
+    private MapKhuyenMai mapKM = new MapKhuyenMai();
+    private MapChiTietSanPham mapSP = new MapChiTietSanPham();
+    private MapKhachHang mapKH = new MapKhachHang();
     /**
      * Creates new form HoaDonChiTietJDialog
      */
@@ -54,6 +58,8 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
         fillToTable();
         filltoTableChiTiet();
         generateCbx();
+        
+        setLocationRelativeTo(null);
     }
     public void filltoTableChiTiet(){
         DefaultTableModel model=(DefaultTableModel) tblHoaDoChiTiet.getModel();
@@ -61,8 +67,8 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
         list.forEach(ct->{
             Object[] values={
                 ct.getMaHD(),
-                ct.getMaSP(),
-                ct.getMaKM(),
+                mapSP.getValueByID(ct.getMaSP()),
+                mapKM.getValueByID(ct.getMaKM()),
                 ct.getSoLuong(),
                 ct.getGia(),
                 ct.getThue(),
@@ -78,10 +84,10 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
         list.forEach(hd -> {
             Object[] values = {
                 hd.getMaHD(),
-                hd.getMaNV(),
+                mapNV.getValueByID(hd.getMaNV()),
                 hd.getNgayLap(),
                 hd.getHinhThuc(),
-                hd.isTrangThai() ? "Đã Thanh Toán" : "Chưa Thanh Toán"
+                mapKH.getValueByID(hd.getMaKH())
             };
             model.addRow(values);
         });
@@ -121,7 +127,7 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
             list = hddao.getAllData(); // Viết phương thức để lấy tất cả dữ liệu
         } else if (resultNam.equals("") && resultThang.equals("")) {
             // Không có Tháng và Năm, chỉ lọc theo Mã NV
-            list = hddao.getDataByValues(resultNV);
+            list = hddao.getDataByValues(mapNV.getIDByValue(resultNV));
         } else if (resultNam.equals("") && resultNV.equals("")) {
             // Không có Năm và Mã NV, chỉ lọc theo Tháng
             list = hddao.getDataByOnlyMonth(Integer.parseInt(resultThang));
@@ -130,24 +136,24 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
             list = hddao.getDataByOnlyYear(Integer.parseInt(resultNam));
         } else if (resultNam.equals("")) {
             // Không có Năm, lọc theo Tháng và Mã NV
-            list = hddao.getDataByThang(resultNV, Integer.parseInt(resultThang));
+            list = hddao.getDataByThang(mapNV.getIDByValue(resultNV), Integer.parseInt(resultThang));
         } else if (resultThang.equals("")) {
             // Không có Tháng, lọc theo Năm và Mã NV
-            list = hddao.getDataByNam(resultNV, Integer.parseInt(resultNam));
+            list = hddao.getDataByNam(mapNV.getIDByValue(resultNV), Integer.parseInt(resultNam));
         } else if (resultNV.equals("")) {
             // Không có Mã NV, lọc theo Tháng và Năm
             list = hddao.getDataTime(Integer.parseInt(resultThang), Integer.parseInt(resultNam));
         } else {
             // Có đủ cả Mã NV, Tháng và Năm
-            list = hddao.getDataByValue(resultNV, Integer.parseInt(resultThang), Integer.parseInt(resultNam));
+            list = hddao.getDataByValue(mapNV.getIDByValue(resultNV), Integer.parseInt(resultThang), Integer.parseInt(resultNam));
         }
         list.forEach(hd -> {
             Object[] values = {
                 hd.getMaHD(),
-                hd.getMaNV(),
+                mapNV.getValueByID(hd.getMaNV()),
                 hd.getNgayLap(),
                 hd.getHinhThuc(),
-                hd.isTrangThai() ? "Đã Thanh Toán" : "Chưa Thanh Toán"
+                mapKH.getValueByID(hd.getMaKH())
             };
             model.addRow(values);
         });
@@ -192,7 +198,7 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
 
         model.addElement("Tất cả");
         for (String o : list) {
-            model.addElement(String.valueOf(o));
+            model.addElement(mapNV.getValueByID(String.valueOf(o)));
         }
         cbNhanVien.setModel(model);
     }
@@ -241,9 +247,6 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         pnThoiGian.setBackground(new java.awt.Color(255, 255, 255));
@@ -298,19 +301,23 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
+        tblHoaDon.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        tblHoaDon.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Mã hóa đơn", "Mã nhân viên", "Ngày lập", "Hình thức", "Trạng thái"
+                "Mã hóa đơn", "Tên nhân viên", "Ngày lập", "Hình thức", "Khách hàng"
             }
         ));
         jScrollPane1.setViewportView(tblHoaDon);
 
         pnThoiGian1.setBackground(new java.awt.Color(255, 255, 255));
         pnThoiGian1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnThoiGian1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
+        cbNhanVien.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cbNhanVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbNhanVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -347,14 +354,14 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 221, Short.MAX_VALUE)
-                        .addComponent(pnThoiGian1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(265, 265, 265)
-                        .addComponent(pnThoiGian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 851, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(pnThoiGian1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnThoiGian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(155, 155, 155))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -364,11 +371,10 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
                     .addComponent(pnThoiGian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pnThoiGian1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(120, 120, 120))
         );
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         tblHoaDoChiTiet.setModel(new javax.swing.table.DefaultTableModel(
@@ -376,7 +382,7 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
 
             },
             new String [] {
-                "Mã hóa đơn", "Mã sản phẩm", "Mã khuyên mại", "Sô lượng", "Giá", "Thuế"
+                "Mã hóa đơn", "Tên sản phẩm", "Mức khuyên mại", "Số lượng", "Giá", "Thuế"
             }
         ));
         jScrollPane2.setViewportView(tblHoaDoChiTiet);
@@ -393,9 +399,9 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -417,7 +423,7 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
-                        .addGap(0, 755, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -426,12 +432,12 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addGap(224, 224, 224))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -444,7 +450,9 @@ public class QuanLyHoaDonJDialog extends javax.swing.JFrame implements Initializ
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 869, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 690, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         pack();

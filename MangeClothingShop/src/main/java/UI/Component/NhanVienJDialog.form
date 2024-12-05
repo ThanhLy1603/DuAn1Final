@@ -249,6 +249,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtMaNV">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtMaNVKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
@@ -259,6 +262,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtTenNV">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtTenNVKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
@@ -340,10 +346,13 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtSDT">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSDTActionPerformed"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtSDTKeyPressed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="txtEmail">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtEmailKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnDelete">
           <Properties>
@@ -359,6 +368,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtPassword">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtPasswordKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rbtnTruongPhong">
           <Properties>
@@ -388,6 +400,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtLuong">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtLuongKeyPressed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -587,7 +602,6 @@
     <Component class="javax.swing.JTextField" name="txtTimKiem">
       <Events>
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtTimKiemKeyPressed"/>
-        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtTimKiemKeyReleased"/>
       </Events>
     </Component>
   </SubComponents>

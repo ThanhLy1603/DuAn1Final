@@ -14,7 +14,9 @@ import Entity.HoaDon;
 import Entity.SanPham;
 import Entity.KhachHang;
 import Map.MapChiTietSanPham;
+import Map.MapDonGia;
 import Map.MapKhuyenMai;
+import UI.Detail.DonGiaJDialog;
 import Utils.Auth;
 import Utils.DialogBox;
 import Utils.ValidateInput;
@@ -28,8 +30,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Utils.NumberFormat;
-import Utils.MaxLength;
-import javax.swing.text.AbstractDocument;
+import javax.swing.JDialog;
 /**
  *
  * @author ADMIN
@@ -39,7 +40,8 @@ enum colHD {
     DONGIA(1),
     SOLUONG(2),
     GIAMGIA(3),
-    THUE(4);
+    THUE(4),
+    THANHTIEN(5);
     int i;
 
     private colHD(int i) {
@@ -55,6 +57,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
     private ChiTietHoaDonDAO daoCTHD = new ChiTietHoaDonDAO();
     private MapChiTietSanPham mapCTSP = new MapChiTietSanPham();
     private MapKhuyenMai mapKM = new MapKhuyenMai();
+    private MapDonGia mapDG = new MapDonGia();
     private Date date = new Date();
     private DecimalFormat dfInt = new DecimalFormat("#");
     private DecimalFormat dfMoney = new DecimalFormat("#,###");
@@ -94,7 +97,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         
         for (SanPham o : list) {
             model.addRow(new Object[]{
-                o.getTenSP() + ", " + o.getMauSac() + ", " + o.getSize()
+                mapCTSP.getValueByID(o.getMaSP())
             });
         }
         
@@ -109,9 +112,6 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         String[] col = {"Danh sách sản phẩm"};
         
         modelSP.setColumnIdentifiers(col);
-        modelSP.setRowCount(0);
-        
-        System.out.println(tblDanhSachSanPham.getRowCount());
         
         for (SanPham o : list) {
             modelSP.addRow(new Object[]{
@@ -214,9 +214,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         int index = tblDanhSachSanPham.getSelectedRow();
         String tenSP = (String) tblDanhSachSanPham.getValueAt(index, 0);
         txtTenSanPham.setText(tenSP);
-        
-        System.out.println("index = " + index);
-        System.out.println(tenSP);
+        txtDonGia.setText(dfInt.format(mapDG.getValueByID(tenSP)));
     }
     
     // Tạo bảng hóa đơn và thêm thông tin hóa đơn vào bảng
@@ -261,6 +259,8 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         String maHD = txtMaHD.getText();
         String maKH = txtMaKH.getText();
         String tenSP = txtTenSanPham.getText();
+        String soLuong = txtSoLuong.getText();
+        String patternNumber = "\\d*";
         String patternText = "\\s+";
         int count = 0;
         
@@ -279,11 +279,48 @@ public class HoaDonJDialog extends javax.swing.JFrame {
             count++;
         }
         
+        if (soLuong.equals("") || !soLuong.matches(patternNumber)) {
+            sb.append("Bạn chưa nhập số lượng \n");
+            count++;
+        }
+        
         if (sb.length() > 0) {
             DialogBox.notice(this, sb.toString());
         }
         
         return count == 0;
+    }
+    
+    public boolean isInventory(String sanPham, int soLuong) {
+        SanPham sp = null;
+        
+        for (SanPham o : daoSP.getAllData()) {
+            if (o.getMaSP().equals(mapCTSP.getIDByValue(sanPham))) sp = o;   
+        }
+         
+        if (sp.getSoLuong() < soLuong) {
+            DialogBox.notice(this, "Số lượng tồn kho không đủ\n"
+                    + "Số lượng sản phẩm " + mapCTSP.getValueByID(sp.getMaSP()) +
+                    ": " + sp.getSoLuong());
+            return false;
+        } else {
+            return true;
+        }  
+    }
+    
+    public boolean isCheckIndex() {
+        int index = -1;
+        
+        index = tblHoaDon.getSelectedRow();
+        
+        if(index < 0) {
+            DialogBox.notice(this, "Bạn chưa chọn sản phẩm\n");
+            System.out.println(index);
+            return false;
+        } else {
+            System.out.println(index);
+            return true;
+        }
     }
     
     public void createKhachHang() {
@@ -337,43 +374,82 @@ public class HoaDonJDialog extends javax.swing.JFrame {
 
     // Thêm sản phẩm vào bảng hóa đơn
     public void addSanPhamVaoHD() {       
-        String tenSP = txtTenSanPham.getText();
-        double donGia = Double.parseDouble(txtDonGia.getText());
-        int soLuong = Integer.parseInt(txtSoLuong.getText());
-        float giamGia = Float.parseFloat(txtGiamGia.getText());
-        int thue = Integer.parseInt(txtThue.getText());
-        double thanhTien = donGia * soLuong * ((1 - giamGia/100))*(100 + thue)/100;
+        if (isCheckValid()) {
+            if (isInventory(txtTenSanPham.getText() ,Integer.parseInt(txtSoLuong.getText()))) {
+                String tenSP = txtTenSanPham.getText();
+                double donGia = Double.parseDouble(txtDonGia.getText());
+                int soLuong = Integer.parseInt(txtSoLuong.getText());
+                float giamGia = Float.parseFloat(txtGiamGia.getText());
+                int thue = Integer.parseInt(txtThue.getText());
+                double thanhTien = donGia * soLuong * ((1 - giamGia/100))*(100 + thue)/100;
+
+                Object[] row = {
+                    tenSP,
+                    dfMoney.format(donGia),
+                    soLuong,
+                    dfInt.format(giamGia),
+                    dfInt.format(thue), 
+                    dfMoney.format(thanhTien)
+                };
+
+                model.addRow(row);
+
+                tblHoaDon.setModel(model);  
+                setTongTien();
+                txtSoLuong.setText("0");
+            }
+        }  
+    }
+    
+    public StringBuilder inHoaDon() {
+        StringBuilder thongTinHoaDon = new StringBuilder();
+        String tenKH = txtTenKH.getText();
+        String tenKhachHang = tenKH.equals("")?"Khách lẻ":txtTenKH.getText();
+        String tongTien = txtTongTien.getText();
+        StringBuilder sanPham = new StringBuilder();
         
-        Object[] row = {
-            tenSP,
-            dfMoney.format(donGia),
-            soLuong,
-            dfInt.format(giamGia),
-            dfInt.format(thue), 
-            dfMoney.format(thanhTien)
-        };
+        for (int i = 0; i < tblHoaDon.getRowCount(); i++) {
+            String maSP = (String) tblHoaDon.getValueAt(i, colHD.TENSP.i);
+            String donGia = (String.valueOf(tblHoaDon.getValueAt(i, colHD.DONGIA.i)));
+            String soLuong = String.valueOf(tblHoaDon.getValueAt(i, colHD.SOLUONG.i));
+            String thanhTien = String.valueOf(tblHoaDon.getValueAt(i, colHD.THANHTIEN.i));
+            
+            sanPham.append(maSP + ": " + donGia + " x " + soLuong + " = " + thanhTien + "\n");
+        } 
         
-        model.addRow(row);
+        thongTinHoaDon.append("Thông tin hóa đơn\n" +
+                "---------------------------------------------------------------\n" +
+                "Ngày tạo hóa đơn: " + txtNgayBan.getText() + "\n" +
+                "Người lập hóa đơn: " + txtTenNhanVien.getText() + "\n" +
+                "Tên khách hàng: " + tenKhachHang + "\n" +
+                "Sản phẩm: \n" +
+                "---------------------------------------------------------------" + "\n" +
+                sanPham +
+                "---------------------------------------------------------------" + "\n" +
+                "Tổng số tiền cần thanh toán: " + tongTien);
         
-        tblHoaDon.setModel(model);  
-        setTongTien();
+        return thongTinHoaDon;
     }
     
     public void saveHoaDon() {
-        createKhachHang();
-        createHoaDon();
-        createChiTietHoaDon();
-        
-        DialogBox.notice(this, "Lưu hóa đơn thành công");
+        if (isCheckIndex()) {
+            createKhachHang();
+            createHoaDon();
+            createChiTietHoaDon();
+            
+            DialogBox.notice(this, inHoaDon().toString());
+        }
     }
     
     public void removeSanPham() {
-        int index = tblHoaDon.getSelectedRow();
-        model.removeRow(index);
-        
-        tblHoaDon.setModel(model);
-        
-        setTongTien();
+        if (isCheckIndex()) {
+            int index = tblHoaDon.getSelectedRow();
+            model.removeRow(index);
+
+            tblHoaDon.setModel(model);
+
+            setTongTien();
+        }
     }
     
     public void clearHoaDon() {
@@ -431,6 +507,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         btnLuuHoaDon = new javax.swing.JButton();
         btnHuyHoaDon = new javax.swing.JButton();
         btnXoaKhoiHD = new javax.swing.JButton();
+        btnCapNhat = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -575,6 +652,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
             }
         });
 
+        txtDonGia.setEnabled(false);
         txtDonGia.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtDonGiaKeyPressed(evt);
@@ -751,6 +829,14 @@ public class HoaDonJDialog extends javax.swing.JFrame {
             }
         });
 
+        btnCapNhat.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnCapNhat.setText("Cập nhật đơn giá");
+        btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCapNhatActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -766,15 +852,17 @@ public class HoaDonJDialog extends javax.swing.JFrame {
                             .addComponent(pnThongTinHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnThongTinChung, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(124, 124, 124)
+                        .addGap(84, 84, 84)
                         .addComponent(btnThemHoaDon)
-                        .addGap(90, 90, 90)
+                        .addGap(36, 36, 36)
                         .addComponent(btnXoaKhoiHD)
-                        .addGap(85, 85, 85)
+                        .addGap(46, 46, 46)
                         .addComponent(btnLuuHoaDon)
-                        .addGap(96, 96, 96)
-                        .addComponent(btnHuyHoaDon)))
-                .addContainerGap(92, Short.MAX_VALUE))
+                        .addGap(49, 49, 49)
+                        .addComponent(btnHuyHoaDon)
+                        .addGap(44, 44, 44)
+                        .addComponent(btnCapNhat)))
+                .addContainerGap(7, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -790,7 +878,8 @@ public class HoaDonJDialog extends javax.swing.JFrame {
                     .addComponent(btnXoaKhoiHD)
                     .addComponent(btnLuuHoaDon)
                     .addComponent(btnHuyHoaDon)
-                    .addComponent(btnThemHoaDon))
+                    .addComponent(btnThemHoaDon)
+                    .addComponent(btnCapNhat))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
 
@@ -849,6 +938,17 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         input.inputString(txtMaKH, 10);
     }//GEN-LAST:event_txtMaHDKeyPressed
 
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
+
+        if (Auth.isManager()) {
+            DonGiaJDialog dialog = new DonGiaJDialog();
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        } else {
+            DialogBox.notice(this, "Bạn không có quyền truy cập");
+        }
+    }//GEN-LAST:event_btnCapNhatActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -890,6 +990,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCapNhat;
     private javax.swing.JButton btnHuyHoaDon;
     private javax.swing.JButton btnLuuHoaDon;
     private javax.swing.JButton btnThemHoaDon;

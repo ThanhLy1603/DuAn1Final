@@ -12,11 +12,12 @@ import javax.swing.text.DocumentFilter;
  *
  * @author ADMIN
  */
-public class MaxLength extends DocumentFilter {
+public class MaxLengthString extends DocumentFilter {
     
+    public String patternString = "^[a-zA-Z0-9]*$";
     private final int maxLength;
 
-    public MaxLength(int maxLength) {
+    public MaxLengthString(int maxLength) {
         this.maxLength = maxLength;
     }
 
@@ -44,7 +45,9 @@ public class MaxLength extends DocumentFilter {
         if (text == null) {
             return true;
         }
-
+        
+        if (!text.matches(patternString)) return false;
+        
         // Kiểm tra độ dài tối đa
         int newLength = fb.getDocument().getLength() + text.length();
         

@@ -136,6 +136,6 @@ public class SanPham {
 
     @Override
     public String toString() {
-        return this.maSP;
+        return "SanPham{" + "maSP=" + maSP + ", maLoai=" + maLoai + ", tenSP=" + tenSP + ", donGia=" + donGia + ", soLuong=" + soLuong + ", mauSac=" + mauSac + ", chatLieu=" + chatLieu + ", size=" + size + ", hinhAnh=" + hinhAnh + ", trangThai=" + trangThai + '}';
     }
 }

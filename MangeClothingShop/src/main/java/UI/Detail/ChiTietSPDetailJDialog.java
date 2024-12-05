@@ -282,6 +282,7 @@ public class ChiTietSPDetailJDialog extends javax.swing.JFrame implements Initia
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jInternalFrame1 = new javax.swing.JInternalFrame();
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -299,9 +300,20 @@ public class ChiTietSPDetailJDialog extends javax.swing.JFrame implements Initia
         tblChiTietSanPham = new javax.swing.JTable();
         cbxChatLieu = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jInternalFrame1.setVisible(true);
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
+        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
+        jInternalFrame1Layout.setHorizontalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jInternalFrame1Layout.setVerticalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel7.setText("Mã sản phẩm");
 
@@ -431,9 +443,9 @@ public class ChiTietSPDetailJDialog extends javax.swing.JFrame implements Initia
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblHinhAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(35, 35, 35)
+                .addGap(50, 50, 50)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -454,17 +466,17 @@ public class ChiTietSPDetailJDialog extends javax.swing.JFrame implements Initia
         showDetail();
     }//GEN-LAST:event_tblChiTietSanPhamMouseClicked
 
-    private void lblHinhAnhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhAnhMouseClicked
-        photo.selectPhotos(lblHinhAnh);
-    }//GEN-LAST:event_lblHinhAnhMouseClicked
+    private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
+        reset();
+    }//GEN-LAST:event_btnLamMoiActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         update();
     }//GEN-LAST:event_btnThemActionPerformed
 
-    private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
-        reset();
-    }//GEN-LAST:event_btnLamMoiActionPerformed
+    private void lblHinhAnhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhAnhMouseClicked
+        photo.selectPhotos(lblHinhAnh);
+    }//GEN-LAST:event_lblHinhAnhMouseClicked
 
     private void txtTenSanPhamKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTenSanPhamKeyPressed
         filterTable();
@@ -511,6 +523,7 @@ public class ChiTietSPDetailJDialog extends javax.swing.JFrame implements Initia
     private javax.swing.JComboBox<String> cbxChatLieu;
     private javax.swing.JComboBox<String> cbxMauSac;
     private javax.swing.JComboBox<String> cbxSize;
+    private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel7;

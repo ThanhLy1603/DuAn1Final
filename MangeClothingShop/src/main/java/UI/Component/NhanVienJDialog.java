@@ -16,14 +16,14 @@ import javax.swing.table.DefaultTableModel;
 import Map.MapGioiTinh;
 import Map.MapChucVu;
 import Utils.DialogBox;
-import java.util.ArrayList;
+import Utils.ValidateInput;
 
 /**
  *
  * @author PHONG
  */
 public class NhanVienJDialog extends javax.swing.JFrame implements CrudController, CheckForm<NhanVien, String>, Initialize<NhanVien> {
-
+    private ValidateInput input = new ValidateInput();
     private NhanVienDao dao = new NhanVienDao();
     private DecimalFormat df = new DecimalFormat("#");
     private MapChucVu mapRole = new MapChucVu();
@@ -48,7 +48,9 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
     public void fillToTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<NhanVien> list = dao.getAllData();
-
+        
+        list.removeIf(o -> o.getMaNV().equals("NONE"));
+        
         String[] col = {
             "MaNV",
             "Tên nhân viên",
@@ -501,8 +503,20 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Mã nhân viên");
 
+        txtMaNV.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMaNVKeyPressed(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Tên nhân viên");
+
+        txtTenNV.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtTenNVKeyPressed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Chức vụ");
@@ -545,9 +559,15 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
             }
         });
 
-        txtSDT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSDTActionPerformed(evt);
+        txtSDT.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSDTKeyPressed(evt);
+            }
+        });
+
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEmailKeyPressed(evt);
             }
         });
 
@@ -559,6 +579,12 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
         });
 
         jLabel4.setText("Mật Khẩu");
+
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyPressed(evt);
+            }
+        });
 
         btGChucVu.add(rbtnTruongPhong);
         rbtnTruongPhong.setText("Trưởng Phòng");
@@ -573,6 +599,12 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel11.setText("Lương");
+
+        txtLuong.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtLuongKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -763,9 +795,6 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtTimKiemKeyPressed(evt);
             }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtTimKiemKeyReleased(evt);
-            }
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -827,10 +856,6 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
         update();
     }//GEN-LAST:event_btnSuaActionPerformed
 
-    private void txtSDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSDTActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSDTActionPerformed
-
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         this.init();
@@ -866,14 +891,33 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
         filterTable();
     }//GEN-LAST:event_cbVaiTroActionPerformed
 
-    private void txtTimKiemKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKiemKeyReleased
-        // TODO add your handling code here:
-        SearchByName();
-    }//GEN-LAST:event_txtTimKiemKeyReleased
-
     private void txtTimKiemKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKiemKeyPressed
-        // TODO add your handling code here:
+        SearchByName();
     }//GEN-LAST:event_txtTimKiemKeyPressed
+
+    private void txtMaNVKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMaNVKeyPressed
+        input.inputString(txtMaNV, 10);
+    }//GEN-LAST:event_txtMaNVKeyPressed
+
+    private void txtTenNVKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTenNVKeyPressed
+        input.inputUnicode(txtTenNV, 50);
+    }//GEN-LAST:event_txtTenNVKeyPressed
+
+    private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed
+        input.inputString(txtPassword, 50);
+    }//GEN-LAST:event_txtPasswordKeyPressed
+
+    private void txtSDTKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSDTKeyPressed
+        input.inputPhone(txtSDT);
+    }//GEN-LAST:event_txtSDTKeyPressed
+
+    private void txtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyPressed
+        input.inputSymbol(txtEmail);
+    }//GEN-LAST:event_txtEmailKeyPressed
+
+    private void txtLuongKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLuongKeyPressed
+        input.inputNumber(txtLuong, 10);
+    }//GEN-LAST:event_txtLuongKeyPressed
 
     /**
      * @param args the command line arguments

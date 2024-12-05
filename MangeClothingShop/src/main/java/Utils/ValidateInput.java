@@ -16,7 +16,7 @@ import javax.swing.text.DocumentFilter;
  */
 public class ValidateInput {
     public String patternNumber = "\\d*";
-    public String patternString = "^[a-zA-Z]*$";
+    public String patternString = "^[a-zA-Z0-9]*$";
     public String patternDecimal = "\\d*(\\.\\d*)?";
     public String patternPhone = "^\\d{1,10}$";
     public String patternSymbol = "^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯàáâãèéêìíòóôõùúăđĩũơưĂÂÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệóòỏõọốồổỗộớờởỡợúùủũụứừửữựỳỵýỷỹ ,\\.]+$";
@@ -24,7 +24,7 @@ public class ValidateInput {
 
     
     public void inputString(JTextField textField, int length) {
-       ((AbstractDocument) textField.getDocument()).setDocumentFilter(new MaxLength(length));
+       ((AbstractDocument) textField.getDocument()).setDocumentFilter(new MaxLengthString(length));
     }
     
     public void inputUnicode(JTextField textField, int length) {
@@ -81,7 +81,7 @@ public class ValidateInput {
             }
         });
         
-        ((AbstractDocument) textField.getDocument()).setDocumentFilter(new MaxLength(10));
+        ((AbstractDocument) textField.getDocument()).setDocumentFilter(new MaxLengthNumber(10));
     }
     
     public void inputSymbol(JTextField textField) {
