@@ -300,7 +300,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
             count++;
         }
         
-        if (soLuong.equals("") || soLuong.equals("0") || !soLuong.matches(patternNumber)) {
+        if (soLuong.equals("") || !soLuong.matches(patternNumber)) {
             sb.append("Bạn chưa nhập số lượng \n");
             count++;
         }
@@ -366,6 +366,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
     }
     
     public boolean isCheckLengthHoaDon() {
+        System.out.println(tblHoaDon.getRowCount());
         if (tblHoaDon.getRowCount() == 0) {
             DialogBox.notice(this, "Chưa có giỏ hàng");
             return false;
@@ -428,7 +429,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
 
     // Thêm sản phẩm vào bảng hóa đơn
     public void addSanPhamVaoHD() {       
-        if (isCheckValid()) {
+        if (isCheckValid() || txtSoLuong.equals("0") ) {
             if (isCheckContain()) {
                 if (isInventory(txtTenSanPham.getText() ,Integer.parseInt(txtSoLuong.getText()))) {
                     String tenSP = txtTenSanPham.getText();
