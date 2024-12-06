@@ -699,7 +699,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
     }//GEN-LAST:event_txtMaKMKeyPressed
 
     private void txtTenKMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTenKMKeyPressed
-        input.inputString(txtTenKM, 150);
+        input.inputUnicode(txtTenKM, 150);
     }//GEN-LAST:event_txtTenKMKeyPressed
 
     private void txtMucKMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMucKMKeyPressed

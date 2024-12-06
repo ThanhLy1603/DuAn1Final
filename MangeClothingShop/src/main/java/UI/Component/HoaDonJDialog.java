@@ -300,7 +300,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
             count++;
         }
         
-        if (soLuong.equals("") || !soLuong.matches(patternNumber)) {
+        if (soLuong.equals("") || soLuong.equals("0") || !soLuong.matches(patternNumber)) {
             sb.append("Bạn chưa nhập số lượng \n");
             count++;
         }

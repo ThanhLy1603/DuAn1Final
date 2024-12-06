@@ -236,7 +236,7 @@ public class NhapHangJDialog extends javax.swing.JFrame implements Initialize<Nh
 //                0
 //        );
 //        setForm(nh);
-        txtSoLuongHang.setText("");
+        txtSoLuongHang.setText("0");
     }
 
     @Override

@@ -63,8 +63,8 @@ public class ChiTietSPDetailJDialog extends javax.swing.JFrame implements Initia
         DefaultTableModel model = new DefaultTableModel();
         List<SanPham> list = dao.getAllData();
         String[] col = {
+            "Mã sản phẩm",
             "Tên sản phẩm",
-            "Tên loại",
             "Màu sắc",
             "Chất liệu",
             "Size",
@@ -92,8 +92,8 @@ public class ChiTietSPDetailJDialog extends javax.swing.JFrame implements Initia
         DefaultTableModel model = new DefaultTableModel();
         List<SanPham> list = dao.getDataByValue(txtTenSanPham.getText());
         String[] col = {
+            "Mã sản phẩm",
             "Tên sản phẩm",
-            "Tên loại",
             "Màu sắc",
             "Chất liệu",
             "Size",
