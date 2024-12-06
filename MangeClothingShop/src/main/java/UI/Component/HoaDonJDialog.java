@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Utils.NumberFormat;
@@ -88,37 +89,51 @@ public class HoaDonJDialog extends javax.swing.JFrame {
     
     // Điền hết tất cả thông tin của hóa đơn vào bảng
     public void fillToSanPhamTable() {
-        DefaultTableModel model = new DefaultTableModel();
-        List<SanPham> list = daoSP.getAllData();
+        // Tạo model cho bảng danh sách sản phẩm
+        DefaultTableModel model = new DefaultTableModel(); 
         
-        String[] col = {"Danh sách sản phẩm"};
+        // Lấy dữ liệu từ database
+        List<SanPham> list = daoSP.getAllData(); 
         
-        model.setColumnIdentifiers(col);
+        // Tạo mảng chứa tên cột
+        String[] col = {"Danh sách sản phẩm"}; 
         
-        for (SanPham o : list) {
+        // Tạo cột cho bảng theo col
+        model.setColumnIdentifiers(col); 
+        
+        // Thêm dòng và dữ liệu cho bảng
+        for (SanPham o : list) { 
             model.addRow(new Object[]{
                 mapCTSP.getValueByID(o.getMaSP())
             });
         }
         
-        tblDanhSachSanPham.setModel(model);
+        // Thiết lập model cho bảng danh sách sản phẩm
+        tblDanhSachSanPham.setModel(model); 
     }
     
     // Điền thông tin của hóa đơn sao khi tìm kiếm
     public void filterToSanPhamTable() {
-        DefaultTableModel modelSP = new DefaultTableModel();
+        // Tạo model cho bảng danh sách sản phẩm
+        DefaultTableModel modelSP = new DefaultTableModel(); 
+        
+        // Lấy dữ liệu theo tên sản phẩm
         List<SanPham> list = daoSP.getDataByValue(txtTenSanPham.getText());
         
-        String[] col = {"Danh sách sản phẩm"};
+        // Tạo mảng chứa tên cột
+        String[] col = {"Danh sách sản phẩm"}; 
         
-        modelSP.setColumnIdentifiers(col);
+        // Tạo cột cho bảng theo col
+        modelSP.setColumnIdentifiers(col); 
         
-        for (SanPham o : list) {
+        // Thêm dòng và dữ liệu cho bảng
+        for (SanPham o : list) { 
             modelSP.addRow(new Object[]{
-                o.getTenSP() + ", " + o.getMauSac() + ", " + o.getSize()
+                mapCTSP.getValueByID(o.getMaSP())
             });
         }
         
+        // Thiết lập model cho bảng danh sách sản phẩm
         tblDanhSachSanPham.setModel(modelSP);
     }
     
@@ -147,6 +162,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         return maHD;
     } 
     
+    // Tạo danh sách mã khách hàng
     public List<String> listMaKH() {
         List<KhachHang> list = daoKH.getAllData();
         List<String> maKH = new ArrayList<>();
@@ -158,10 +174,12 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         return maKH;
     }
     
+    // Tạo mã khách hàng
     public String generateMaKH() {
         String maKH = null;
         int count = 1;
         
+        // Kiểm tra xem mã khách hàng có nằm trong danh sách hay không
         do {
             maKH = String.format("KH%d", count++);    
         } while (listMaKH().contains(maKH));
@@ -169,6 +187,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         return maKH;
     }
     
+    // Tạo danh sách mã chi tiết hóa đơn
     public List<String> listMaCTHD() {
         List<ChiTietHoaDon> list = daoCTHD.getAllData();
         List<String> maCTHD = new ArrayList<>();
@@ -180,6 +199,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         return maCTHD;
     }
     
+    // Tạo mã chi tiết hóa đơn
     public String generateMaCTHD() {
         String maCTHD = null;
         int count = 1;
@@ -254,6 +274,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         txtTongTien.setText(dfMoney.format(tongTien));
     }
     
+    // Kiểm tra tính hợp lệ khi người dùng nhập vào
     public boolean isCheckValid() {
         StringBuilder sb = new StringBuilder();
         String maHD = txtMaHD.getText();
@@ -279,7 +300,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
             count++;
         }
         
-        if (soLuong.equals("") || !soLuong.matches(patternNumber)) {
+        if (soLuong.equals("") || soLuong.equals("0") || !soLuong.matches(patternNumber)) {
             sb.append("Bạn chưa nhập số lượng \n");
             count++;
         }
@@ -291,13 +312,35 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         return count == 0;
     }
     
+    // Kiểm tra tên sản phẩm người dùng nhập vào có nằm trong danh sách hay không
+    public boolean isCheckContain() {
+        String tenSP = txtTenSanPham.getText();
+        Map<String, String> map = mapCTSP.getMapData();
+        int count = 0;
+        
+        // Kiếm tra xem mã có kiếm trong danh sách hay không
+        for (Map.Entry<String, String> o : map.entrySet()) {
+            if (tenSP.equals(o.getValue())) count++;
+        }
+        
+        if (count > 0) {
+            return true;
+        } else {
+            DialogBox.notice(this, "Mặt hàng này không có trong kho");
+            return false;
+        } 
+    }
+    
+    // Kiếm tra số lượng mặt hàng trong hóa đơn có lớn hơn số lượng tồn kho hay không
     public boolean isInventory(String sanPham, int soLuong) {
         SanPham sp = null;
         
+        // Dò tìm và nếu tìm được tên sản phẩm thì gán dữ liệu của sản phẩm vào sp
         for (SanPham o : daoSP.getAllData()) {
             if (o.getMaSP().equals(mapCTSP.getIDByValue(sanPham))) sp = o;   
         }
          
+        // Kiếm tra xem số lượng chi tiết hóa đơn có lớn hơn số lượng tồn kho hay không
         if (sp.getSoLuong() < soLuong) {
             DialogBox.notice(this, "Số lượng tồn kho không đủ\n"
                     + "Số lượng sản phẩm " + mapCTSP.getValueByID(sp.getMaSP()) +
@@ -308,6 +351,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         }  
     }
     
+    // Kiếm tra xem người dùng click chuột vào bảng hóa đơn hay chưa
     public boolean isCheckIndex() {
         int index = -1;
         
@@ -315,14 +359,22 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         
         if(index < 0) {
             DialogBox.notice(this, "Bạn chưa chọn sản phẩm\n");
-            System.out.println(index);
             return false;
         } else {
-            System.out.println(index);
             return true;
         }
     }
     
+    public boolean isCheckLengthHoaDon() {
+        if (tblHoaDon.getRowCount() == 0) {
+            DialogBox.notice(this, "Chưa có giỏ hàng");
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    // Thêm khách hàng vào database
     public void createKhachHang() {
         if (isCheckValid()) {
             daoKH.insertData(new KhachHang(
@@ -335,6 +387,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         }
     }
     
+    // Thêm hóa đơn vào database
     public void createHoaDon() {
         if (isCheckValid()) {
             daoHD.insertData(new HoaDon(
@@ -348,6 +401,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         }
     }
     
+    // Thêm chi tiết hóa đơn vào database
     public void createChiTietHoaDon() {
         if (isCheckValid()) {
             for (int i = 0; i < tblHoaDon.getRowCount(); i++) {
@@ -375,32 +429,35 @@ public class HoaDonJDialog extends javax.swing.JFrame {
     // Thêm sản phẩm vào bảng hóa đơn
     public void addSanPhamVaoHD() {       
         if (isCheckValid()) {
-            if (isInventory(txtTenSanPham.getText() ,Integer.parseInt(txtSoLuong.getText()))) {
-                String tenSP = txtTenSanPham.getText();
-                double donGia = Double.parseDouble(txtDonGia.getText());
-                int soLuong = Integer.parseInt(txtSoLuong.getText());
-                float giamGia = Float.parseFloat(txtGiamGia.getText());
-                int thue = Integer.parseInt(txtThue.getText());
-                double thanhTien = donGia * soLuong * ((1 - giamGia/100))*(100 + thue)/100;
+            if (isCheckContain()) {
+                if (isInventory(txtTenSanPham.getText() ,Integer.parseInt(txtSoLuong.getText()))) {
+                    String tenSP = txtTenSanPham.getText();
+                    double donGia = Double.parseDouble(txtDonGia.getText());
+                    int soLuong = Integer.parseInt(txtSoLuong.getText());
+                    float giamGia = Float.parseFloat(txtGiamGia.getText());
+                    int thue = Integer.parseInt(txtThue.getText());
+                    double thanhTien = donGia * soLuong * ((1 - giamGia/100))*(100 + thue)/100;
 
-                Object[] row = {
-                    tenSP,
-                    dfMoney.format(donGia),
-                    soLuong,
-                    dfInt.format(giamGia),
-                    dfInt.format(thue), 
-                    dfMoney.format(thanhTien)
-                };
+                    Object[] row = {
+                        tenSP,
+                        dfMoney.format(donGia),
+                        soLuong,
+                        dfInt.format(giamGia),
+                        dfInt.format(thue), 
+                        dfMoney.format(thanhTien)
+                    };
 
-                model.addRow(row);
+                    model.addRow(row);
 
-                tblHoaDon.setModel(model);  
-                setTongTien();
-                txtSoLuong.setText("0");
+                    tblHoaDon.setModel(model);  
+                    setTongTien();
+                    txtSoLuong.setText("0");
+                }
             }
         }  
     }
     
+    // Tạo thông tin cho hóa đơn
     public StringBuilder inHoaDon() {
         StringBuilder thongTinHoaDon = new StringBuilder();
         String tenKH = txtTenKH.getText();
@@ -408,6 +465,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         String tongTien = txtTongTien.getText();
         StringBuilder sanPham = new StringBuilder();
         
+        // Tạo danh sách sản phẩm đã bán
         for (int i = 0; i < tblHoaDon.getRowCount(); i++) {
             String maSP = (String) tblHoaDon.getValueAt(i, colHD.TENSP.i);
             String donGia = (String.valueOf(tblHoaDon.getValueAt(i, colHD.DONGIA.i)));
@@ -417,6 +475,7 @@ public class HoaDonJDialog extends javax.swing.JFrame {
             sanPham.append(maSP + ": " + donGia + " x " + soLuong + " = " + thanhTien + "\n");
         } 
         
+        // Tạo thông tin của hóa đơn
         thongTinHoaDon.append("Thông tin hóa đơn\n" +
                 "---------------------------------------------------------------\n" +
                 "Ngày tạo hóa đơn: " + txtNgayBan.getText() + "\n" +
@@ -431,16 +490,30 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         return thongTinHoaDon;
     }
     
+    // Xóa form
+    public void clearForm() {
+        txtMaHD.setText("");
+        txtMaKH.setText("");
+        txtDiaChi.setText("");
+        txtSoDT.setText("");
+        txtTenSanPham.setText("");
+        txtDonGia.setText("0");
+        txtSoLuong.setText("0");
+    }
+    
+    // Lưu hóa đơn vào database
     public void saveHoaDon() {
-        if (isCheckIndex()) {
+        if (isCheckLengthHoaDon()) {
             createKhachHang();
             createHoaDon();
             createChiTietHoaDon();
             
             DialogBox.notice(this, inHoaDon().toString());
+            clearHoaDon();
         }
     }
     
+    // Xóa sản phẩm đã chọn trong bảng hóa đơn
     public void removeSanPham() {
         if (isCheckIndex()) {
             int index = tblHoaDon.getSelectedRow();
@@ -452,9 +525,12 @@ public class HoaDonJDialog extends javax.swing.JFrame {
         }
     }
     
+    // Xóa bảng hóa đơn
     public void clearHoaDon() {
+        clearForm();
         model.setRowCount(0);
         tblHoaDon.setModel(model);
+        generateForm();
         
         setTongTien();
     }

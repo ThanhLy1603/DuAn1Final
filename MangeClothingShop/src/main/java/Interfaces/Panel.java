@@ -11,6 +11,7 @@ import javax.swing.JPanel;
  *
  * @author ADMIN
  */
+
 public interface Panel {
     public void showPanel(JPanel visiblePanel);
     public void showDialogInPanel(JPanel targetPanel, JFrame dialog);

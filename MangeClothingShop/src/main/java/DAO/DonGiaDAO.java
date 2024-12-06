@@ -41,17 +41,7 @@ public class DonGiaDAO implements DAO<DonGia, String>{
         
         return list;
     }
-
-    @Override
-    public List<DonGia> getDataByValue(String value) {
-        return null;
-    }
-
-    @Override
-    public DonGia getDataById(String ma) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
+    
     @Override
     public void insertData(DonGia o) {
         String sql = "INSERT INTO DonGia VALUES (?,?)";
@@ -79,4 +69,13 @@ public class DonGiaDAO implements DAO<DonGia, String>{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
+    @Override
+    public DonGia getDataById(String ma) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public List<DonGia> getDataByValue(String value) {
+        return null;
+    }
 }

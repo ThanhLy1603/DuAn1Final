@@ -21,14 +21,16 @@ import java.util.logging.Logger;
 public class ChiTietHoaDonDAO implements DAO<ChiTietHoaDon, String>{
 
     @Override
-    public List<ChiTietHoaDon> getAllData() {
+    public List<ChiTietHoaDon> getAllData() { // Lấy hết dữ liệu từ bảng chi tiết hóa đơn
         List<ChiTietHoaDon> list = new ArrayList<>();
         
         String sql = "SELECT * FROM ChiTietHoaDon ORDER BY MaHD";
         Object[] values = {};
         
+        // Để nhận dữ liệu từ kết quả truy vấn
         ResultSet rs = JDBC.executeQuery(sql, values);
         
+        // Duyệt từng phần tử trong bảng rồi lưu vào list
         try {
             while (rs.next()){
                 list.add(new ChiTietHoaDon(
@@ -115,9 +117,6 @@ public class ChiTietHoaDonDAO implements DAO<ChiTietHoaDon, String>{
         
         JDBC.executeUpdate(sql, values);
     }
-
-
-  
 
     @Override
     public List<ChiTietHoaDon> getDataByValue(String value) {

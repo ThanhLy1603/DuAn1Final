@@ -37,20 +37,21 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
         init();
     }
 
-    @Override
+    @Override // Đổ dữ liệu lên form sau khi form sau khi form khởi tạo xong
     public void init() {
         this.fillToTable();
         this.generateCbx();
         setLocationRelativeTo(null);
     }
 
-    @Override
+    @Override  // Đổ dữ liệu từ database lên form
     public void fillToTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<NhanVien> list = dao.getAllData();
         
         list.removeIf(o -> o.getMaNV().equals("NONE"));
         
+        // Tạo cột cho bảng nhân viên
         String[] col = {
             "MaNV",
             "Tên nhân viên",
@@ -63,7 +64,8 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
         };
 
         model.setColumnIdentifiers(col);
-
+        
+        // Thêm dòng và dữ liệu vào bảng
         list.forEach(nv -> {
             Object[] values = {
                 nv.getMaNV(),
@@ -81,7 +83,7 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
         tblNhanVien.setModel(model);
     }
 
-    @Override
+    @Override // Lọc dữ liệu bảng nhân viên
     public void filterTable() {
         DefaultTableModel model = new DefaultTableModel();
         String itemGioiTinh = (String) cbGioiTinh.getSelectedItem();
@@ -89,8 +91,10 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
 
         int indexGioiTinh = mapGender.getIDByValue(itemGioiTinh);
         int indexChucVu = mapRole.getIDByValue(itemChucVu);
-
+        
         List<NhanVien> list = dao.getDataByValue(indexGioiTinh, indexChucVu);
+        
+        // Tạo cột cho bảng nhân viên
         String[] col = {
             "MaNV",
             "Tên nhân viên",
@@ -103,7 +107,8 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
         };
 
         model.setColumnIdentifiers(col);
-
+        
+        // Tạo dòng và dữ liệu cho bảng nhân viên
         list.forEach(nv -> {
             Object[] values = {
                 nv.getMaNV(),
@@ -120,13 +125,9 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
         });
 
         tblNhanVien.setModel(model);
-
-        System.out.println("ChucVu = " + indexChucVu);
-        System.out.println("Gioi Tinh = " + indexGioiTinh);
-        System.out.println("-----------------------------");
     }
 
-    @Override
+    @Override // Tạo dữ liệu cho combo box
     public void generateCbx() {
         cbxGioiTinh();
         cbxChucVu();
@@ -163,7 +164,23 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
 
         cbVaiTro.setModel(model);
     }
+    
+    @Override
+    public void setForm(NhanVien nv) {
+        txtMaNV.setText(nv.getMaNV());
+        txtPassword.setText(nv.getMatKhau());
+        txtTenNV.setText(nv.getTenNV());
+        rdbNam.setSelected(nv.isNam()); // true nếu là "Nam"
+        rdbNu.setSelected(nv.isNu()); // false nếu là "Nam"
 
+        // Gán giá trị cho radio button chức vụ
+        rbtnTruongPhong.setSelected(nv.isTruongPhong()); // true nếu là "Quản lý"
+        rbtnNhanVien.setSelected(nv.isNhanVien()); // false nếu là "Quản lý"
+        txtLuong.setText(df.format((long) nv.getLuong()));
+        txtEmail.setText(nv.getEmail());
+        txtSDT.setText(nv.getSoDT());
+    }
+    
     @Override
     public void getForm(int index) {
         String maNV = (String) tblNhanVien.getValueAt(index, 0); // MaNV
@@ -182,6 +199,7 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
             // Xử lý nếu không phải số (có thể ghi log hoặc set lương mặc định)
             System.out.println("Lương không hợp lệ: " + luongStr);
         }
+        
         boolean gioiTinh = gioiTinhStr.equals("Nam"); // Nếu giá trị là "Nam" thì true, ngược lại false
         rdbNam.setSelected(gioiTinh);
         rdbNu.setSelected(!gioiTinh);
@@ -193,22 +211,6 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
 
         NhanVien nv = new NhanVien(maNV, matKhau, tenNV, gioiTinh, chucVu, luong, soDT, email);
         setForm(nv);
-    }
-
-    @Override
-    public void setForm(NhanVien nv) {
-        txtMaNV.setText(nv.getMaNV());
-        txtPassword.setText(nv.getMatKhau());
-        txtTenNV.setText(nv.getTenNV());
-        rdbNam.setSelected(nv.isNam()); // true nếu là "Nam"
-        rdbNu.setSelected(nv.isNu()); // false nếu là "Nam"
-
-        // Gán giá trị cho radio button chức vụ
-        rbtnTruongPhong.setSelected(nv.isTruongPhong()); // true nếu là "Quản lý"
-        rbtnNhanVien.setSelected(nv.isNhanVien()); // false nếu là "Quản lý"
-        txtLuong.setText(df.format((long) nv.getLuong()));
-        txtEmail.setText(nv.getEmail());
-        txtSDT.setText(nv.getSoDT());
     }
 
     @Override
@@ -363,48 +365,6 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
         } else {
             return true;
         }
-    }
-
-    @Override
-    public boolean isCheckLength() {
-//        String maNV = txtMaNV.getText();  // Lấy mã nhân viên từ input
-//        String matKhau = txtPassword.getText();  // Lấy mật khẩu từ input
-//        String tenNV = txtTenNV.getText();  // Lấy tên nhân viên từ input
-//        String soDT = txtSDT.getText();  // Lấy số điện thoại từ input
-//        String email = txtEmail.getText();  // Lấy email từ input
-//
-//        // Kiểm tra độ dài mã nhân viên (ví dụ: phải có ít nhất 3 ký tự và tối đa 10 ký tự)
-//        if (maNV.length() < 3 || maNV.length() > 10) {
-//            DialogBox.alert(this, "Mã nhân viên phải có độ dài từ 3 đến 10 ký tự");
-//            return false;
-//        }
-//
-//        // Kiểm tra độ dài mật khẩu (ví dụ: phải có ít nhất 6 ký tự)
-//        if (matKhau.length() < 6) {
-//            DialogBox.alert(this, "Mật khẩu phải có ít nhất 6 ký tự");
-//            return false;
-//        }
-//
-//        // Kiểm tra độ dài tên nhân viên (ví dụ: từ 3 đến 50 ký tự)
-//        if (tenNV.length() < 3 || tenNV.length() > 50) {
-//            DialogBox.alert(this, "Tên nhân viên phải có độ dài từ 3 đến 50 ký tự");
-//            return false;
-//        }
-//
-//        // Kiểm tra độ dài số điện thoại (ví dụ: 10 hoặc 11 ký tự)
-//        if (soDT.length() != 10 && soDT.length() != 11) {
-//            DialogBox.alert(this, "Số điện thoại phải có 10 hoặc 11 ký tự");
-//            return false;
-//        }
-//
-//        // Kiểm tra độ dài email (ví dụ: phải có ít nhất 5 ký tự)
-//        if (email.length() < 5) {
-//            DialogBox.alert(this, "Email phải có ít nhất 5 ký tự");
-//            return false;
-//        }
-//
-//        // Nếu tất cả các trường đều hợp lệ, trả về true
-        return true;
     }
 
     @Override
@@ -912,7 +872,7 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
     }//GEN-LAST:event_txtSDTKeyPressed
 
     private void txtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyPressed
-
+        input.inputSymbol(txtEmail);
     }//GEN-LAST:event_txtEmailKeyPressed
 
     private void txtLuongKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLuongKeyPressed
@@ -995,5 +955,8 @@ public class NhanVienJDialog extends javax.swing.JFrame implements CrudControlle
     private javax.swing.JTextField txtTenNV;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
-
+    @Override
+    public boolean isCheckLength() {
+        return true;
+    }
 }

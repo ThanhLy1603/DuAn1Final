@@ -20,7 +20,6 @@ import javax.swing.table.DefaultTableModel;
  * @author anhth
  */
 public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<KhachHang>, CheckForm<KhachHang, String>, CrudController {
-
     private KhachHangDAO dao = new KhachHangDAO();
     private ValidateInput input = new ValidateInput();
 
@@ -32,15 +31,16 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
     @Override
     public void init() {
         fillToTable();
-        //filterTable();
+        
         setLocationRelativeTo(null);
     }
 
-    @Override
+    @Override  // Đổ dữ liệu từ database vào bảng khách hàng
     public void fillToTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<KhachHang> list = dao.getAllData();
-
+        
+        // Tạo cột cho bảng 
         String[] col = {
             "Mã khách hàng",
             "Tên khách hàng",
@@ -50,7 +50,8 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         };
 
         model.setColumnIdentifiers(col);
-
+        
+        // Thêm dòng cho bảng  nhân viên
         for (KhachHang o : list) {
             model.addRow(new Object[]{
                 o.getMaKH(),
@@ -60,14 +61,16 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                 o.getSoDT()
             });
         }
+        
         tblKhachHang.setModel(model);
     }
 
-    @Override
+    @Override // Lọc dữ liệu bảng khách hàng
     public void filterTable() {
         DefaultTableModel model = new DefaultTableModel();
         List<KhachHang> list = dao.getDataByValue(txtSearch.getText());
-
+        
+        // Tạo cột cho bảng khách hàng
         String[] col = {
             "Mã khách hàng",
             "Tên khách hàng",
@@ -77,7 +80,8 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         };
 
         model.setColumnIdentifiers(col);
-
+        
+        // Tạo dòng và dữ liệu cho bảng khách hàng
         for (KhachHang o : list) {
             model.addRow(new Object[]{
                 o.getMaKH(),
@@ -87,15 +91,21 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                 o.getSoDT()
             });
         }
+        
         tblKhachHang.setModel(model);
     }
 
-    @Override
-    public void generateCbx() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    @Override  // Nhận giá trị từ đối tượng rồi đổ dữ liệu lên form
+    public void setForm(KhachHang o) {
+        txtMaKH.setText(o.getMaKH());
+        txtTenKH.setText(o.getTenKH());
+        rdnNam.setSelected(o.isNam());
+        rdnNu.setSelected(o.isNu());
+        txtSDT.setText(o.getSoDT());
+        txaDiaChi.setText(o.getDiaChi());
     }
-
-    @Override
+    
+    @Override // Tạo đối tượng rồi đưa vào setForm
     public void getForm(int index) {
         String maKH = (String) tblKhachHang.getValueAt(index, 0);
         String tenKH = (String) tblKhachHang.getValueAt(index, 1);
@@ -115,23 +125,13 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         setForm(kh);
     }
 
-    @Override
+    @Override // Đổ dữ liệu vào form khi click vào bảng
     public void showDetail() {
         int index = tblKhachHang.getSelectedRow();
         getForm(index);
     }
 
-    @Override
-    public void setForm(KhachHang o) {
-        txtMaKH.setText(o.getMaKH());
-        txtTenKH.setText(o.getTenKH());
-        rdnNam.setSelected(o.isNam());
-        rdnNu.setSelected(o.isNu());
-        txtSDT.setText(o.getSoDT());
-        txaDiaChi.setText(o.getDiaChi());
-    }
-
-    @Override
+    @Override // Kiếm tra tính hợp lệ khi người dùng nhập liệu lên form
     public boolean isCheckValid() {
         StringBuilder sb = new StringBuilder();
         String maKH = txtMaKH.getText();
@@ -168,9 +168,10 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         return count == 0;
     }
 
-    @Override
+    @Override // Kiếm tra xem mã khách hàng đã nhập có nằm trong danh sách có sẵn hay không
     public boolean isCheckContain(List<KhachHang> list, String ma) {
         int count = 0;
+        
         for (KhachHang o : list) {
             if (ma.equals(o.getMaKH())) {
                 count++;
@@ -180,7 +181,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         return count != 0;
     }
 
-    @Override
+    @Override // Kiếm tra xem mã người dùng nhập có bị trùng hay không
     public boolean isCheckDuplicate() {
         List<KhachHang> list = dao.getAllData();
         String ma = txtMaKH.getText();
@@ -193,7 +194,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         }
     }
 
-    @Override
+    @Override // Kiếm tra xem mã người dùng nhập có nằm trong danh sách hay không
     public boolean isCheckUpdate() {
         List<KhachHang> list = dao.getAllData();
         String ma = txtMaKH.getText();
@@ -206,12 +207,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         }
     }
 
-    @Override
-    public boolean isCheckLength() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
+    @Override // Kiếm tra xem mã người dùng nhập có nằm trong danh sách hay không
     public boolean isCheckDelete() {
         List<KhachHang> list = dao.getAllData();
         String ma = txtMaKH.getText();
@@ -224,7 +220,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         }
     }
 
-    @Override
+    @Override  // Tạo khách hàng
     public void create() {
         if (isCheckValid()) {
             if (isCheckDuplicate()) {
@@ -243,7 +239,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
 
     }
 
-    @Override
+    @Override // Xóa hết dữ liệu trên form
     public void reset() {
         txtMaKH.setText("");
         txtTenKH.setText("");
@@ -252,7 +248,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         txaDiaChi.setText("");
     }
 
-    @Override
+    @Override // Chỉnh sửa thông tin khách hàng
     public void update() {
         if (isCheckValid()) {
             if (isCheckUpdate()) {
@@ -270,7 +266,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
         }
     }
 
-    @Override
+    @Override // Xóa khách hàng
     public void delete() {
         if (Auth.isManager()) {
             if (isCheckDelete()) {
@@ -281,7 +277,7 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
                     reset();
                 }
             }
-        }else{
+        } else {
             DialogBox.notice(this, "Bạn không có quyền xóa");
         }
     }
@@ -700,5 +696,13 @@ public class KhachHangJDialog extends javax.swing.JFrame implements Initialize<K
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtTenKH;
     // End of variables declaration//GEN-END:variables
-
+    @Override
+    public void generateCbx() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public boolean isCheckLength() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

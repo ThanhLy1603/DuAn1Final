@@ -125,14 +125,17 @@ public class ChiTietSPDetailJDialog extends javax.swing.JFrame implements Initia
     
     public void CbxMauSac() {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
+        
         String[] items = {
             "Đen",
             "Đỏ",
-            "Xanh",
+            "Xanh dương",
             "Trắng",
             "Xanh lá",
             "Hồng",
-            "Cam"
+            "Cam",
+            "Be",
+            "Vàng"
         };
         
         for (String o : items) {
@@ -165,7 +168,11 @@ public class ChiTietSPDetailJDialog extends javax.swing.JFrame implements Initia
             "Vải",
             "Cotton",
             "Jean",
-            "Thun"
+            "Thun",
+            "Len",
+            "Silk",
+            "Nilon",
+            "Polyester"
         };
         
         for (String o : items) {
@@ -336,6 +343,7 @@ public class ChiTietSPDetailJDialog extends javax.swing.JFrame implements Initia
 
         lblHinhAnh.setText("Nhấn để chọn hình");
         lblHinhAnh.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        lblHinhAnh.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblHinhAnh.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblHinhAnhMouseClicked(evt);

@@ -23,6 +23,8 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author nguye
  */
+
+// Đại diện cho tên các cột của bảng khuyến mãi
 enum colKM {
     MAKM(0),
     TENKM(1),
@@ -51,17 +53,19 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
     }
 
     
-    @Override
+    @Override // Đổ dữ liệu lên form sau khi form được khởi tạo
     public void init() {
         fillToTable();
         
         setLocationRelativeTo(null);
     }
 
-    @Override
+    @Override // Đổ dữ liệu từ database lên bảng khuyến mãi
     public void fillToTable() {
         List<KhuyenMai> list = dao.getAllData();
         DefaultTableModel model = new DefaultTableModel();
+        
+        // Tạo cột cho bảng khuyến mãi
         String[] col = {
             "Mã khuyến mãi",
             "Tên khuyến mãi",
@@ -72,6 +76,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         
         model.setColumnIdentifiers(col);
         
+        // Tạo dòng và dữ liệu cho bảng khuyến mãi
         for (KhuyenMai o : list) {
             model.addRow(new Object[]{
                 o.getMaKM(),
@@ -85,17 +90,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         tblKhuyenMai.setModel(model);
     }
 
-    @Override
-    public void filterTable() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void generateCbx() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
+    @Override  // Nhận giá trị từ đối tượng rồi đổ lên form
     public void setForm(KhuyenMai o) {
         txtMaKM.setText(o.getMaKM());
         txtMucKM.setText(df.format(o.getMucKM()));
@@ -104,7 +99,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         txtNgayKT.setText(formatter.format(o.getNgayKetThuc()));
     }
 
-    @Override
+    @Override  // Tạo đối tượng rồi đưa vào setForm
     public void getForm(int index) {
         String maKM = String.valueOf(tblKhuyenMai.getValueAt(index, colKM.MAKM.i));
         String tenKM = String.valueOf(tblKhuyenMai.getValueAt(index, colKM.TENKM.i));
@@ -128,13 +123,13 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         setForm(o);
     }
 
-    @Override
+    @Override  // Đổ dữ liệu lên form khi click vào dòng của bảng khuyến mãi
     public void showDetail() {
         int index = tblKhuyenMai.getSelectedRow();
         getForm(index);
     }
 
-    @Override
+    @Override // Kiếm tra tính hợp lệ khi dùng nhập liệu vào form
     public boolean isCheckValid() {
         StringBuilder sb = new StringBuilder();
         
@@ -182,7 +177,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         return count == 0;
     }
 
-    @Override
+    @Override // Kiếm tra xem mã khuyến mãi người dùng nhập có nằm trong danh sách khuyến mãi hay không 
     public boolean isCheckContain(List<KhuyenMai> list, String ma) {
         int count = 0;
         for (KhuyenMai o : list) {
@@ -192,10 +187,11 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         return count != 0;
     }
 
-    @Override
+    @Override  // Kiếm tra xem mã khuyến mãi có bị trùng hay không
     public boolean isCheckDuplicate() {
         List<KhuyenMai> list = dao.getAllData();
         String ma = txtMaKM.getText();
+        
         if (isCheckContain(list, ma) || ma.equalsIgnoreCase("KM0")) {
             DialogBox.notice(this, "Mã khuyến mãi đã có rồi. Vui lòng nhập mã khuyến mãi khác");
             return false;
@@ -204,7 +200,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         }
     }
 
-    @Override
+    @Override // Kiếm tra xem mã có năm trong danh sách hay không
     public boolean isCheckUpdate() {
         List<KhuyenMai> list = dao.getAllData();
         String ma = txtMaKM.getText();
@@ -217,12 +213,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         }
     }
 
-    @Override
-    public boolean isCheckLength() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
+    @Override // Kiếm tra xem mã có nằm trong danh sách hay không
     public boolean isCheckDelete() {
         List<KhuyenMai> list = dao.getAllData();
         String ma = txtMaKM.getText();
@@ -235,7 +226,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         }
     }
 
-    @Override
+    @Override  // Thêm khuyến mãi
     public void create() {
         if (isCheckValid()) {
             if (isCheckDuplicate()) {
@@ -263,7 +254,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         }
     }
 
-    @Override
+    @Override  // Xóa dữ liệu trên form
     public void reset() {
         KhuyenMai o = new KhuyenMai(
                 "", 
@@ -280,7 +271,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         txtNgayKT.setText("");
     }
 
-    @Override
+    @Override  // Chỉnh sữa khuyến mãi
     public void update() {
         if (isCheckValid()) {
             if (isCheckUpdate()) {
@@ -308,7 +299,7 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
         }
     }
 
-    @Override
+    @Override  // Xóa khuyến mãi
     public void delete() {
         if (isCheckDelete()) {
             if (DialogBox.confirm(this, "Bạn có muốn xóa chương trình khuyến mãi này không?")){
@@ -802,5 +793,18 @@ public class KhuyenMaiJDialog extends javax.swing.JFrame implements Initialize<K
     private javax.swing.JTextField txtNgayKT;
     private javax.swing.JTextField txtTenKM;
     // End of variables declaration//GEN-END:variables
+    @Override
+    public void filterTable() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
+    @Override
+    public void generateCbx() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public boolean isCheckLength() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

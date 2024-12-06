@@ -40,8 +40,9 @@ public class DoanhThuJDialog extends javax.swing.JFrame implements Initialize<Ob
         setLocationRelativeTo(null);
     }
     
+    // Lấy tổng doanh thu, doanh thu thấp nhất, doanh thu cao nhất
     public void getValueRevenue() {
-        DoanhThuDAO.MinMaxRevenue o = dao.getMinMaxRevenue();
+        DoanhThuDAO.MinMaxRevenue o = dao.getMinMaxRevenue(); // MinMaxRevenue là class con của class DoanhThuDAO 
         lblCaoNhat.setText(df.format(o.getMax()));
         lblThapNhat.setText(df.format(o.getMin()));
         lblTongDoanhThu.setText(df.format(dao.getTotalRevenue()));
@@ -52,36 +53,53 @@ public class DoanhThuJDialog extends javax.swing.JFrame implements Initialize<Ob
         cbxLoaiSanPham();
         cbxNam();
     }
-        
+    
+    // Tạo danh sách cho combo box năm
     public void cbxNam() {
+        // Tạo model cho combo box năm
         DefaultComboBoxModel model = new DefaultComboBoxModel();
+        
+        // Tạo danh sách của năm 
         List<Integer> list = dao.getYear();
         
         model.addElement("Tất cả");
+        // Thêm năm vào model của năm
         for (Integer o : list) {
             model.addElement(String.valueOf(o));
         }
         
+        // Thêm model vào combox box năm
         cbxNam.setModel(model);
     }
     
+    // Tạo danh sách cho combox loại sản phẩm
     public void cbxLoaiSanPham() {
+        // Tạo model cho combo box loại sản phẩm
         DefaultComboBoxModel model = new DefaultComboBoxModel();
+        
+        // Tạo danh sách loại sản phẩm
         List<LoaiSanPham> list = daoLSP.getAllData();
         
+        // Thêm loại sản phẩm vào model loại sản phẩm
         model.addElement("Tất cả");
         for (LoaiSanPham o : list) {
             model.addElement(o.getTenLoai());
         }
         
+        // Thêm model vào combo box loại sản phẩm
         cbxLoaiSanPham.setModel(model);
     }
     
+    // Đổ dữ liệu từ database vào bảng doanh thu
     @Override
     public void fillToTable() {
+        // Tạo model cho bảng doanh thu
         DefaultTableModel model = new DefaultTableModel();
+        
+        // Tạo danh sách doanh thu
         List<DoanhThu> list = dao.getAllData();
         
+        // Tạo mảng chứa tên cột 
         String[] col = {
             "Mã sản phẩm",
             "Tên sản phẩm",
@@ -92,8 +110,10 @@ public class DoanhThuJDialog extends javax.swing.JFrame implements Initialize<Ob
             "Ngày lập"
         };
         
+        // Thiết lập cột cho model theo col
         model.setColumnIdentifiers(col);
         
+        // Thêm hàng và dữ liệu vào model
         for (DoanhThu o : list) {
             model.addRow(new Object[]{
                 o.getMaSP(),
@@ -106,11 +126,14 @@ public class DoanhThuJDialog extends javax.swing.JFrame implements Initialize<Ob
             });
         }
         
+        // Thêm model vào bảng doanh thu
         tblDoanhThu.setModel(model);
     }
     
-    @Override
+    
+    @Override   // Lọc dữ liệu bảng doanh thu
     public void filterTable() {
+        // Tạo model cho bảng doanh thu
         DefaultTableModel model = new DefaultTableModel();
         
         String timKiem = txtTimKiem.getText();
@@ -123,9 +146,11 @@ public class DoanhThuJDialog extends javax.swing.JFrame implements Initialize<Ob
         
         List<DoanhThu> list = null;
         
+        // Tạo danh sách cho bảng
         if (resultNam.equals("")) list = dao.getDataByValue(timKiem, resultLoai);
         else list = dao.getDataByValue(timKiem, resultLoai, Integer.parseInt(resultNam));
-                     
+        
+        // Tạo mảng chứa tên cột
         String[] col = {
             "Mã sản phẩm",
             "Tên sản phẩm",
@@ -136,8 +161,10 @@ public class DoanhThuJDialog extends javax.swing.JFrame implements Initialize<Ob
             "Ngày lập"
         };
         
+        // Thiết lập cột cho model theo col
         model.setColumnIdentifiers(col);
         
+        // Thêm dòng và dữ liệu vào model
         for (DoanhThu o : list) {
             model.addRow(new Object[]{
                 o.getMaSP(),
@@ -150,6 +177,7 @@ public class DoanhThuJDialog extends javax.swing.JFrame implements Initialize<Ob
             });
         }
         
+        // Thêm model vào bảng doanh thu
         tblDoanhThu.setModel(model);
     }
     

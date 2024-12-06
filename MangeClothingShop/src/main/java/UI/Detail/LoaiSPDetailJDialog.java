@@ -165,7 +165,7 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
         List<LoaiSanPham> list = dao.getAllData();
         String ma = txtMaLoai.getText();
 
-        if (isCheckContain(list, ma)) {
+        if (isCheckContain(list, ma) || ma.equals("NONE")) {
             DialogBox.notice(this, "Mã loại này có rồi. Vui lòng nhập mã loại khác");
             return false;
         } else {
@@ -282,6 +282,12 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
         jLabel12.setText("Mã loại");
 
         jLabel13.setText("Tên loại");
+
+        txtMaLoai.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMaLoaiKeyPressed(evt);
+            }
+        });
 
         txtTenLoai.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -476,9 +482,13 @@ public class LoaiSPDetailJDialog extends javax.swing.JFrame implements Initializ
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void txtTenLoaiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTenLoaiKeyPressed
-        input.inputString(txtMaLoai, 10);
+        input.inputUnicode(txtTenLoai, 50);
         filterTable();
     }//GEN-LAST:event_txtTenLoaiKeyPressed
+
+    private void txtMaLoaiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMaLoaiKeyPressed
+        input.inputString(txtMaLoai, 10);
+    }//GEN-LAST:event_txtMaLoaiKeyPressed
 
     /**
      * @param args the command line arguments
